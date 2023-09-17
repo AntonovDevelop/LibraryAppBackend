@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Siesta</title>
+    <link rel="stylesheet" href="/css/authorization.css"/>
+</head>
+<body>
+
+<div th:if="${param.error}" class="alert alert-danger margin-bottom">
+    Пользователь не найден или пароль указан не верно
+</div>
+
+
+<form action="#" class="form" th:action="@{/login}" method="post">
+    <h1>Вход</h1>
+    <div class="input-form">
+        <input type="text" name="username" id="username"
+               placeholder="Почта" required autofocus>
+    </div>
+    <div class="input-form">
+        <input type="password" name="password" id="password"
+               placeholder="Пароль" required>
+    </div>
+    <button type="submit" class="btn btn-primary button-fixed">Войти</button>
+    <a href="/signup" class="forget">Регистрация</a>
+</form>
+
+</body>
+</html>

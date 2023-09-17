@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+            integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/index.css"/>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <title>Корзина</title>
+</head>
+<body>
+<div th:insert="navbar"></div>
+<main class="main">
+    <div class="back" style="gap: 40px">
+        <div th:if="${!products.isEmpty()}">
+            <div class="products-cart-pg">
+                <div th:each="product : ${products}">
+                    <div class="product-cart-pg">
+                        <a th:href="@{/product/{id}(id=${product.id})}">
+                            <img class="product-image-cart-pg" th:src="@{/images/{image}(image=${product.image_url})}" alt="Описание изображения">
+                        </a>
+                        <div class="product-info-cart-pg">
+                            <div class="info-name-cart-pg" th:text="${product.name}"></div>
+                            <div class="info-price-cart-pg" th:text="${product.price}"></div>
+                            <div class="product-count-frame">
+                                <button class="product-count-minus" th:id="'minus' + ${product.id}" th:attr="data-product-id=${product.id}">
+                                    <img th:src="@{../images/icons/minus.svg}" style="width: 25px; height: 5px;">
+                                </button>
+                                <div class="product-count-text" th:id="'count-product' + ${product.id}" th:text="${product.count}"></div>
+                                <button class="product-count-plus" th:id="'plus' + ${product.id}" th:attr="data-product-id=${product.id}">
+                                    <img th:src="@{../images/icons/plus.svg}" style="width: 25px; height: 25px;">
+                                </button>
+                                <button type="button" class="delete-button-cart-pg"
+                                        th:attr="onclick=|document.getElementById('remove_product-${product.id}').click()|">
+                                    Удалить
+                                </button>
+                                <form th:action="@{/orders/cart/removeProduct/{id}(id=${product.id})}" method="post">
+                                    <button th:id="'remove_product-' + ${product.id}" type="submit" style="display: none">
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:if="${!combos.isEmpty()}">
+            <div class="products-cart-pg">
+                <div th:each="combo : ${combos}">
+                    <div class="product-cart-pg">
+                        <a th:href="@{/combo/{id}(id=${combo.id})}">
+                            <img class="product-image-cart-pg" th:src="@{/images/{image}(image=${combo.image_url})}" alt="Описание изображения">
+                        </a>
+                        <div class="product-info-cart-pg">
+                            <div class="info-name-cart-pg" th:text="${combo.name}"></div>
+                            <div class="combo-price-sale-frame-cart-pg">
+                                <div class="combo info-price-cart-pg" th:text="${combo.price}"></div>
+                                <div class="info-price-cart-pg" th:text="${combo.sale} + '%'"></div>
+                            </div>
+                            <div class="product-count-frame">
+                                <button class="combo-count-minus" th:id="'minus' + ${combo.id}" th:attr="data-combo-id=${combo.id}">
+                                    <img th:src="@{../images/icons/minus.svg}" style="width: 25px; height: 5px;">
+                                </button>
+                                <div class="combo-count-text" th:id="'count-combo' + ${combo.id}" th:text="${combo.count}"></div>
+                                <button class="combo-count-plus" th:id="'plus' + ${combo.id}" th:attr="data-combo-id=${combo.id}">
+                                    <img th:src="@{../images/icons/plus.svg}" style="width: 25px; height: 25px;">
+                                </button>
+                                <button type="button" class="delete-button-cart-pg"
+                                        th:attr="onclick=|document.getElementById('remove_combo-${combo.id}').click()|">
+                                    Удалить
+                                </button>
+                                <form th:action="@{/orders/cart/removeCombo/{id}(id=${combo.id})}" method="post">
+                                    <button th:id="'remove_combo-' + ${combo.id}" type="submit" style="display: none">
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:if="${!products.isEmpty() || !combos.isEmpty()}" class="cart-buttons-info">
+            <div class="cart-info-frame">
+                <div>Общее количество:</div>
+                <div th:text="${cartDto.count}" id="count" class="cart-result-text"></div>
+            </div>
+            <div class="cart-info-frame">
+                <div>Общая стоимость:</div>
+                <div th:text="${cartDto.price}" id="price" class="cart-result-text"></div>
+            </div>
+            <div class="cart-info-frame">
+                <div>Способ оплаты:</div>
+                <!--<div th:text="${cartDto.payment}" id="payment" class="cart-result-text"></div>-->
+            </div>
+            <div class="cart-buttons">
+                <form action="#" th:if="${client.street != null && client.house != null}" th:action="@{/orders/cart/buy}" method="post">
+                    <div class="payment-select">
+                        <div class="form_radio_btn">
+                            <input id="radio-1" type="radio" name="radio" value="1" checked>
+                            <label for="radio-1">Наличные</label>
+                        </div>
+                        <div class="form_radio_btn">
+                            <input id="radio-2" type="radio" name="radio" value="2">
+                            <label for="radio-2">Безналичный</label>
+                        </div>
+                    </div>
+                    <button type="submit" class="to-card-btn-pr-pg" style="margin-top: 30px;">
+                        Заказать
+                    </button>
+                </form>
+                <a th:if="${client.street == null || client.house == null}" th:href="@{/profile/edit}">
+                    <button type="submit" class="to-card-btn-pr-pg" style="margin-top: 30px;">
+                        Добавить адрес
+                    </button>
+                </a>
+                <form action="#" th:action="@{/orders/cart/removeAll}" method="post">
+                    <button type="submit" class="to-card-btn-pr-pg">
+                        Очистить корзину
+                    </button>
+                </form>
+            </div>
+        </div>
+        <div th:if="${products.isEmpty() && combos.isEmpty()}">
+            <img class="empty-cart-image" th:src="@{../images/cart/logo-cup.svg}" style="margin-bottom: 25px;">
+            <div style="font-weight: 600; font-size: 30px; line-height: 36px;">Ваша корзина пуста</div>
+        </div>
+    </div>
+</main>
+<script>
+
+$(document).ready(function() {
+
+  $('.product-count-plus').click(function() {
+    var productId = $(this).data('product-id');
+    changeProductQuantity(productId, 1);
+  });
+
+  $('.product-count-minus').click(function() {
+    var productId = $(this).data('product-id');
+    changeProductQuantity(productId, -1);
+  });
+
+
+  function changeProductQuantity(productId, count) {
+    var countElementId = '#count-product' + productId;
+    var currentCount = parseInt($(countElementId).text());
+
+    var newCount = currentCount + count;
+
+    // Ограничение нижнего порога
+    if (newCount < 1) {
+      newCount = 1;
+    }
+
+    // Ограничение верхнего порога
+    if (newCount > 10) {
+      newCount = 10;
+    }
+
+    $(countElementId).text(newCount);
+    updatePriceAndCount();
+
+    $.ajax({
+      type: 'POST',
+      url: '/orders/cart/addProduct/' + productId,
+      data: {
+        count: newCount
+      },
+      success: function(response) {
+        // Обновить отображение количества продукта после успешного изменения на сервере
+        // Например, обновить значение на странице или перезагрузить корзину
+      },
+      error: function(xhr) {
+        // Обработать ошибку при изменении количества продукта
+      }
+    });
+  }
+
+  $('.combo-count-plus').click(function() {
+        var comboId = $(this).data('combo-id');
+        changeComboQuantity(comboId, 1);
+      });
+
+      $('.combo-count-minus').click(function() {
+        var comboId = $(this).data('combo-id');
+        changeComboQuantity(comboId, -1);
+      });
+
+  function changeComboQuantity(comboId, count) {
+    var countElementId = '#count-combo' + comboId;
+    var currentCount = parseInt($(countElementId).text());
+
+    var newCount = currentCount + count;
+
+    // Ограничение нижнего порога
+    if (newCount < 1) {
+      newCount = 1;
+    }
+
+    // Ограничение верхнего порога
+    if (newCount > 10) {
+      newCount = 10;
+    }
+
+    $(countElementId).text(newCount);
+    updatePriceAndCount();
+
+    $.ajax({
+      type: 'POST',
+      url: '/orders/cart/addCombo/' + comboId,
+      data: {
+        count: newCount
+      },
+      success: function(response) {
+        // Обновить отображение количества продукта после успешного изменения на сервере
+        // Например, обновить значение на странице или перезагрузить корзину
+      },
+      error: function(xhr) {
+        // Обработать ошибку при изменении количества продукта
+      }
+    });
+  }
+
+
+  function updatePriceAndCount() {
+    var totalPrice = 0.0;
+    var totalCount = 0;
+
+     $('.product-count-text').each(function() {
+        var count = parseInt($(this).text());
+        var price = parseFloat($(this).closest('.product-info-cart-pg').find('.info-price-cart-pg').text());
+
+        totalCount += count;
+        totalPrice += count * price;
+     });
+
+      $('.combo-count-text').each(function() {
+        var count = parseInt($(this).text());
+        var price = parseFloat($(this).closest('.product-info-cart-pg').find('.combo.info-price-cart-pg').text());
+
+        totalCount += count;
+        totalPrice += count * price;
+      });
+      $('#count').text(totalCount);
+      $('#price').text(totalPrice);
+
+       $.ajax({
+      type: 'POST',
+      url: "/orders/cart/setPrice",
+      data: {
+        price: totalPrice
+      },
+      success: function(response) {
+        // Обновить отображение количества продукта после успешного изменения на сервере
+        // Например, обновить значение на странице или перезагрузить корзину
+      },
+      error: function(xhr) {
+        // Обработать ошибку при изменении количества продукта
+      }
+    });
+  }
+
+    $('.delete-button-cart-pg').on('click', function() {
+      updatePriceAndCount();
+    });
+
+  updatePriceAndCount();
+});
+</script>
+</body>
+</html>

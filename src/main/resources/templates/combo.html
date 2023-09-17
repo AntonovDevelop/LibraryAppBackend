@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+            integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/index.css"/>
+    <title>Продукт</title>
+</head>
+<body>
+<div th:insert="navbar"></div>
+<main class="main">
+    <div class="combo-back-combo-pg">
+        <div class="combo-name-combo-pg" th:text="${combo.name}">Комбо</div>
+        <img class="combo-image-combo-pg" th:src="@{/images/{image}(image=${combo.image_url})}" alt="Описание изображения">
+        <div class="combo-info-combo-pg" th:text="${combo.description}"></div>
+        <div class="products-list-combo-pg">
+            <ul>
+                <li th:each="product : ${products}">
+                    <div class="product-name-combo-pg" th:text="${product.name}"></div>
+                    <div class="count-price-combo-pg">
+                        <div class="product-price-combo-pg" th:text="${product.price}"></div>
+                        <div class="product-count-combo-pg">1 шт</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="price-and-btn-pr-pg">
+            <form action="#" th:action="@{/orders/cart/addCombo/{id}(id=${combo.id})}" method="post" th:if="${combo.isInCart == 0}">
+                <input type="hidden" value="1" name="count">
+                <button type="submit" class="to-card-btn-pr-pg">
+                    Добавить
+                </button>
+            </form>
+            <a th:href="@{/orders/cart}"  th:if="${combo.isInCart == 1}">
+                <div class="to-card-btn-pr-pg">
+                    В корзину
+                </div>
+            </a>
+            <div class="price-text-pr-pg">
+                <div class="price-pr-pg" th:text="${combo.price}"></div>
+                <div>₽</div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

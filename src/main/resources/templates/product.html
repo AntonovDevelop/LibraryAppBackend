@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+            integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/index.css"/>
+    <title>Продукт</title>
+</head>
+<body>
+<div th:insert="navbar"></div>
+<main class="main">
+    <div class="back-pr-pg">
+        <div class="product-pr-pg">
+            <img class="product-image-pr-pg" th:src="@{/images/{image}(image=${product.image_url})}" alt="Описание изображения">
+            <div class="product-name-pr-pg" th:text="${product.name}"></div>
+            <div class="product-weight-text-pr-pg">
+                <div class="product-weight-pr-pg" th:text="${product.weight}"></div>
+                <div>г</div>
+            </div>
+        </div>
+        <div class="product-info-pr-pg" th:text="${product.description}"></div>
+        <div class="price-and-btn-pr-pg">
+            <div class="price-text-pr-pg">
+                <div class="price-pr-pg" th:text="${product.price}"></div>
+                <div>₽</div>
+            </div>
+            <form action="#" th:action="@{/orders/cart/addProduct/{id}(id=${product.id})}" method="post" th:if="${product.isInCart == 0}">
+                <input type="hidden" value="1" name="count">
+                <button type="submit" class="to-card-btn-pr-pg">
+                        Добавить
+                </button>
+            </form>
+            <a th:href="@{/orders/cart}"  th:if="${product.isInCart == 1}">
+                <div class="to-card-btn-pr-pg">
+                        В корзину
+                </div>
+            </a>
+            <button type="button" class="delete-button-cart-pg"
+                    th:attr="onclick=|document.getElementById('favourite-${product.id}').click()|">
+                <i class="fa fa-star" aria-hidden="true"></i>
+            </button>
+            <form action="#" th:action="@{/product/favourite/{id}(id=${product.id})}" method="post">
+                <button type="submit" class="to-card-btn-pr-pg" th:id="'favourite-' + ${product.id}" style="display: none">
+                </button>
+            </form>
+        </div>
+        <div class="reviews-back-pr-pg">
+            <div class="reviews-header-frame-pr-pg">
+                <div class="reviews-header-pr-pg">Отзывы</div>
+                <div th:if="${reviewClient == null || (reviewClient.score == null && reviewClient.text == null)}">
+                    <a th:href="@{/product/{product_id}/review/edit(product_id=${product.id})}">
+                        <div class="to-card-btn-pr-pg">Оставить отзыв</div>
+                    </a>
+                </div>
+                <div th:if="${reviewClient != null && (reviewClient.score != null || reviewClient.text != null)}">
+                    <div class="reviews-buttons-frame-pr-pg">
+                        <a th:href="@{/product/{product_id}/review/edit/{id}(product_id=${product.id}, id=${reviewClient.id})}">
+                            <div class="to-card-btn-pr-pg">Изменить отзыв</div>
+                        </a>
+                        <button type="button" class="to-card-btn-pr-pg"
+                                th:attr="onclick=|document.getElementById('remove-${product.id}').click()|">
+                            Удалить отзыв
+                        </button>
+                        <form th:action="@{/product/{product_id}/review/delete(product_id=${product.id})}" method="post">
+                            <button th:id="'remove-' + ${product.id}" type="submit" style="display: none">
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div th:each="review : ${reviews}">
+                <div class="review-pr-pg">
+                    <div class="name-and-rating-review-pr-pg">
+                        <div class="name-review-pr-pg" th:text="${review.client}"></div>
+                        <div class="rating-frame-review-pr-pg">
+                            <div class="rating-ic-review-pr-pg">
+                                <i class="fa fa-star" aria-hidden="true"></i>
+                            </div>
+                            <div class="rating-review-pr-pg" th:if="${review.score != null}" th:text="${review.score}"></div>
+                        </div>
+                    </div>
+                    <div class="comment-review-pr-pg">
+                        <div class="comment-header-review-pr-pg">Комментарий</div>
+                        <div class="comment-text-review-pr-pg" th:if="${review.text != null}" th:text="${review.text}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+            integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/index.css"/>
+    <title>Профиль</title>
+</head>
+<body>
+<div th:insert="navbar"></div>
+<main class="main">
+    <div class="back">
+        <div class="name-email-prf-pg">
+            <div class="name-and-surname-prf-pg">
+                <div class="name-prf-pg" th:text="${clientDto.name}"></div>
+                <div class="surname-prf-pg" th:text="${clientDto.surname}"></div>
+            </div>
+            <div class="email-prf-pg" th:text="${clientDto.login}"></div>
+        </div>
+        <div class="info-prf-pg">
+            <div class="address-frame-prf-pg">
+                <h4>Адрес</h4>
+                <div class="address-prf-pg">г. Ульяновск
+                    <div class="address-street-prf-pg" th:if="${clientDto.street != null}" th:text="',&nbsp;ул.&nbsp;' + ${clientDto.street}"></div>
+                    <div class="address-house-prf-pg" th:if="${clientDto.house != null}" th:text="'&nbsp;' + ${clientDto.house} + ','"></div>
+                    <div class="address-entrance-prf-pg" th:if="${clientDto.entrance != null and clientDto.entrance != ''}" th:text="'&nbsp;подъезд&nbsp;' + ${clientDto.entrance} + ','"></div>
+                    <div class="address-flat-prf-pg" th:if="${clientDto.flat != null and clientDto.flat != ''}" th:text="'&nbsp;кв.&nbsp;' + ${clientDto.flat}"></div>
+                </div>
+            </div>
+            <div class="phone-number-bl-prf-pg">
+                <h4>Телефон</h4>
+                <div class="phone-number-prf-pg" th:text="${clientDto.phone_number}">
+                </div>
+            </div>
+        </div>
+        <a class="to-card-btn-pr-pg" th:href="@{/profile/edit}">
+            Изменить
+        </a>
+    </div>
+</main>
+</body>
+</html>

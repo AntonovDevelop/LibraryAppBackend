@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Siesta</title>
+    <link rel="stylesheet" href="/css/authorization.css"/>
+</head>
+<body>
+
+<div th:if="${param.created}" class="alert alert-success margin-bottom">
+    Пользователь '<span th:text="${param.created}"></span>' успешно создан
+</div>
+
+<form action="#" class="form" th:action="@{/signup}" method="post" th:object="${userDto}">
+    <h1>Регистрация</h1>
+    <div class="input-form">
+        <input type="text" placeholder="Имя" th:field="${userDto.name}"
+               required autofocus maxlength="32">
+    </div>
+    <div class="input-form">
+        <input type="text" placeholder="Фамилия" th:field="${userDto.surname}" required maxlength="32">
+    </div>
+    <div class="input-form">
+        <input type="text" placeholder="Номер телефона" th:field="${userDto.phone_number}" required maxlength="32">
+    </div>
+    <div class="input-form">
+        <input type="text" placeholder="Почта" th:field="${userDto.login}" required>
+    </div>
+    <div class="input-form">
+        <input type="password" placeholder="Пароль" th:field="${userDto.password}" required minlength="8">
+    </div>
+    <div class="input-form">
+        <button type="submit" class="btn btn-primary button-fixed">Зарегистрироваться</button>
+    </div>
+    <a href="/login" class="forget">Вход</a>
+</form>
+
+</body>
+</html>

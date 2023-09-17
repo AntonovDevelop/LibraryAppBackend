@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+            integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+            crossorigin="anonymous"
+            referrerpolicy="no-referrer"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Montserrat:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/index.css"/>
+    <title>Заказ</title>
+</head>
+<body>
+<div th:insert="navbar"></div>
+<main class="main">
+    <div class="back">
+        <div class="order-ordr-pg">
+            <div class="number-order-and-price-ordr-pg">
+                <div class="number-frame-ordr-pg">
+                    <div class="number-txt-ordr-pg">Заказ номер:</div>
+                    <div class="number-ordr-pg" th:text="${order.id}"></div>
+                </div>
+                <div class="price-frame-ordr-pg">
+                    <div class="price-txt-ordr-pg">Стоимость:</div>
+                    <div class="price-ordr-pg" th:text="${order.price}"></div>
+                </div>
+            </div>
+            <div class="info-ordr-pg">
+                <div class="address-frame-ordr-pg">
+                    <div class="address-txt-ordr-pg">Адрес доставки:</div>
+                    <div class="address-prf-pg">г. Ульяновск
+                        <div class="address-street-prf-pg" th:if="${order.street != null}" th:text="',&nbsp;ул.&nbsp;' + ${order.street}"></div>
+                        <div class="address-house-prf-pg" th:if="${order.house != null}" th:text="'&nbsp;' + ${order.house} + ','"></div>
+                        <div class="address-entrance-prf-pg" th:if="${order.entrance != null and order.entrance != ''}" th:text="'&nbsp;подъезд&nbsp;' + ${order.entrance} + ','"></div>
+                        <div class="address-flat-prf-pg" th:if="${order.flat != null and order.flat != ''}" th:text="'&nbsp;кв.&nbsp;' + ${order.flat}"></div>
+                    </div>
+                </div>
+                <div th:if="${deliveryman != null}" class="user-frame-ordr-pg">
+                    <div class="user-txt-ordr-pg">Доставщик:</div>
+                    <div class="user-ordr-pg" th:text="${deliveryman.name}"></div>
+                    <div class="user-ordr-pg" th:text="${deliveryman.surname}"></div>
+                    <div class="" th:text="${deliveryman.phone_number}"></div>
+                </div>
+                <div class="status-ordr-pg" th:text="${order.status}"></div>
+            </div>
+        </div>
+        <div th:if="${!products.isEmpty()}">
+            <div class="products-cart-pg">
+                <div th:each="product : ${products}">
+                    <div class="product-cart-pg">
+                        <a th:href="@{/product/{id}(id=${product.id})}">
+                            <img class="product-image-cart-pg" th:src="@{/images/{image}(image=${product.image_url})}" alt="Описание изображения">
+                        </a>
+                        <div class="product-info-cart-pg">
+                            <div class="info-name-cart-pg" th:text="${product.name}"></div>
+                            <div class="info-price-cart-pg" th:text="${product.price}"></div>
+                            <div class="product-count-frame">
+                                <div class="product-count-text" th:text="'Количество:&nbsp;' + ${product.count}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:if="${!combos.isEmpty()}">
+            <div class="products-cart-pg">
+                <div th:each="combo : ${combos}">
+                    <div class="product-cart-pg">
+                        <a th:href="@{/combo/{id}(id=${combo.id})}">
+                            <img class="product-image-cart-pg" th:src="@{/images/{image}(image=${combo.image_url})}" alt="Описание изображения">
+                        </a>
+                        <div class="product-info-cart-pg">
+                            <div class="info-name-cart-pg" th:text="${combo.name}"></div>
+                            <div class="combo-price-sale-frame-cart-pg">
+                                <div class="combo info-price-cart-pg" th:text="${combo.price}"></div>
+                                <div class="info-price-cart-pg" th:text="${combo.sale} + '%'"></div>
+                            </div>
+                            <div class="product-count-frame">
+                                <div class="combo-count-text" th:text="${combo.count}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div th:if="${!products.isEmpty() || !combos.isEmpty()}">
+            Общее количество
+            <div th:text="${order.count}">
+
+            </div>
+            Общая стоимость
+            <div th:text="${order.price}">
+
+            </div>
+        </div>
+        <a class="btn-back-ordr-pg" sec:authorize="hasRole('ROLE_CLIENT')" th:href="@{/orders}">К заказам</a>
+        <a class="btn-back-ordr-pg" sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin}">К заказам</a>
+    </div>
+</main>
+</body>
+</html>
