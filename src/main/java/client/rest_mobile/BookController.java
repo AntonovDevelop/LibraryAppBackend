@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(WebConfiguration.REST_API + "/product")
+@RequestMapping(WebConfiguration.REST_API + "/book")
 public class BookController {
     private final BookService bookService;
 
