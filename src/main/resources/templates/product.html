@@ -22,37 +22,37 @@
 <div th:insert="navbar"></div>
 <main class="main">
     <div class="back-pr-pg">
-        <div class="product-pr-pg">
-            <img class="product-image-pr-pg" th:src="@{/images/{image}(image=${product.image_url})}" alt="Описание изображения">
-            <div class="product-name-pr-pg" th:text="${product.name}"></div>
-            <div class="product-weight-text-pr-pg">
-                <div class="product-weight-pr-pg" th:text="${product.weight}"></div>
+        <div class="book-pr-pg">
+            <img class="book-image-pr-pg" th:src="@{/images/{image}(image=${book.image_url})}" alt="Описание изображения">
+            <div class="book-name-pr-pg" th:text="${book.name}"></div>
+            <div class="book-weight-text-pr-pg">
+                <div class="book-weight-pr-pg" th:text="${book.weight}"></div>
                 <div>г</div>
             </div>
         </div>
-        <div class="product-info-pr-pg" th:text="${product.description}"></div>
+        <div class="book-info-pr-pg" th:text="${book.description}"></div>
         <div class="price-and-btn-pr-pg">
             <div class="price-text-pr-pg">
-                <div class="price-pr-pg" th:text="${product.price}"></div>
+                <div class="price-pr-pg" th:text="${book.price}"></div>
                 <div>₽</div>
             </div>
-            <form action="#" th:action="@{/orders/cart/addProduct/{id}(id=${product.id})}" method="post" th:if="${product.isInCart == 0}">
+            <form action="#" th:action="@{/orders/cart/addProduct/{id}(id=${book.id})}" method="post" th:if="${book.isInCart == 0}">
                 <input type="hidden" value="1" name="count">
                 <button type="submit" class="to-card-btn-pr-pg">
                         Добавить
                 </button>
             </form>
-            <a th:href="@{/orders/cart}"  th:if="${product.isInCart == 1}">
+            <a th:href="@{/orders/cart}"  th:if="${book.isInCart == 1}">
                 <div class="to-card-btn-pr-pg">
                         В корзину
                 </div>
             </a>
             <button type="button" class="delete-button-cart-pg"
-                    th:attr="onclick=|document.getElementById('favourite-${product.id}').click()|">
+                    th:attr="onclick=|document.getElementById('favourite-${book.id}').click()|">
                 <i class="fa fa-star" aria-hidden="true"></i>
             </button>
-            <form action="#" th:action="@{/product/favourite/{id}(id=${product.id})}" method="post">
-                <button type="submit" class="to-card-btn-pr-pg" th:id="'favourite-' + ${product.id}" style="display: none">
+            <form action="#" th:action="@{/book/favourite/{id}(id=${book.id})}" method="post">
+                <button type="submit" class="to-card-btn-pr-pg" th:id="'favourite-' + ${book.id}" style="display: none">
                 </button>
             </form>
         </div>
@@ -60,21 +60,21 @@
             <div class="reviews-header-frame-pr-pg">
                 <div class="reviews-header-pr-pg">Отзывы</div>
                 <div th:if="${reviewClient == null || (reviewClient.score == null && reviewClient.text == null)}">
-                    <a th:href="@{/product/{product_id}/review/edit(product_id=${product.id})}">
+                    <a th:href="@{/book/{product_id}/review/edit(product_id=${book.id})}">
                         <div class="to-card-btn-pr-pg">Оставить отзыв</div>
                     </a>
                 </div>
                 <div th:if="${reviewClient != null && (reviewClient.score != null || reviewClient.text != null)}">
                     <div class="reviews-buttons-frame-pr-pg">
-                        <a th:href="@{/product/{product_id}/review/edit/{id}(product_id=${product.id}, id=${reviewClient.id})}">
+                        <a th:href="@{/book/{product_id}/review/edit/{id}(product_id=${book.id}, id=${reviewClient.id})}">
                             <div class="to-card-btn-pr-pg">Изменить отзыв</div>
                         </a>
                         <button type="button" class="to-card-btn-pr-pg"
-                                th:attr="onclick=|document.getElementById('remove-${product.id}').click()|">
+                                th:attr="onclick=|document.getElementById('remove-${book.id}').click()|">
                             Удалить отзыв
                         </button>
-                        <form th:action="@{/product/{product_id}/review/delete(product_id=${product.id})}" method="post">
-                            <button th:id="'remove-' + ${product.id}" type="submit" style="display: none">
+                        <form th:action="@{/book/{product_id}/review/delete(product_id=${book.id})}" method="post">
+                            <button th:id="'remove-' + ${book.id}" type="submit" style="display: none">
                             </button>
                         </form>
                     </div>

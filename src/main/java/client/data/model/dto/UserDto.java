@@ -2,20 +2,22 @@ package client.data.model.dto;
 
 import client.data.model.entity.User;
 import client.data.model.enums.UserRole;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserDto {
-
     private Long id;
     private String name;
     private String surname;
     private String login;
     private UserRole role;
-    private Long user_id;
-    private String phone_number;
+    private Long userId;
+    private String phoneNumber;
     private String password;
-
-    public UserDto() {
-    }
 
     public UserDto(User user) {
         this.id = user.getId();
@@ -23,7 +25,7 @@ public class UserDto {
         this.surname = user.getSurname();
         this.login = user.getLogin();
         this.role = user.getRole();
-        this.user_id = user.getUser_id();
+        this.userId = user.getUser_id();
         this.password = user.getPassword();
     }
 
@@ -47,8 +49,8 @@ public class UserDto {
         return role;
     }
 
-    public Long getUser_id() {
-        return user_id;
+    public Long getUserId() {
+        return userId;
     }
 
     public void setName(String name) {
@@ -67,16 +69,16 @@ public class UserDto {
         this.role = role;
     }
 
-    public void setUser_id(Long user_id) {
-        this.user_id = user_id;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
-    public String getPhone_number() {
-        return phone_number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getPassword() {

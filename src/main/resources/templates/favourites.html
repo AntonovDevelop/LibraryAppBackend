@@ -25,13 +25,13 @@
 <body>
 <div th:insert="navbar"></div>
 <main class="main">
-    <div class="products-main-pg">
-        <div th:each="pr : ${products}">
-            <div class="product-main-pg">
-                <a th:href="@{/product/{id}(id=${pr.id})}">
-                    <img class="product-image-main-pg" th:src="@{/images/{image}(image=${pr.image_url})}" alt="*картинка продукта*">
+    <div class="books-main-pg">
+        <div th:each="pr : ${books}">
+            <div class="book-main-pg">
+                <a th:href="@{/book/{id}(id=${pr.id})}">
+                    <img class="book-image-main-pg" th:src="@{/images/{image}(image=${pr.image_url})}" alt="*картинка продукта*">
                 </a>
-                <div class="product-info-main-pg">
+                <div class="book-info-main-pg">
                     <div class="info-name-main-pg" th:text="${pr.name}"></div>
                     <div class="info-dop-main-pg">
                         <div class="dop-weight-frame-main-pg">

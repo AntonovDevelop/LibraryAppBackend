@@ -9,7 +9,7 @@ spring:
       ddl-auto: create
     database-platform: org.hibernate.dialect.PostgreSQL95Dialect
   datasource:
-    url: jdbc:postgresql://localhost:5432/cafe
+    url: jdbc:postgresql://localhost:5432/mylibrarydb
     username: postgres
     password: postgres
     driver-class-name: org.postgresql.Driver

@@ -2,19 +2,21 @@ package client.data.model.dto;
 
 import client.data.model.entity.Combo_Order;
 import client.data.model.entity.Order;
-import client.data.model.entity.Order_Item;
-import client.data.model.enums.Order_Status;
+import client.data.model.entity.OrderItem;
+import client.data.model.enums.OrderStatus;
 import client.data.model.enums.PaymentEnum;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import groovy.lang.Tuple;
-import org.springframework.data.util.Pair;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.*;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderDto {
-
     private Long id;
-    private Order_Status status;
+    private OrderStatus status;
     private Double price;
     private String title;
     private Integer count;
@@ -30,9 +32,6 @@ public class OrderDto {
     private Long time;
     private String time_represent;
     private PaymentEnum payment;
-
-    public OrderDto() {
-    }
 
     public OrderDto(Order order) {
         this.id = order.getId();
@@ -67,9 +66,9 @@ public class OrderDto {
         }
 
         if (order.getItems() != null) {
-            List<Order_Item> items = order.getItems();
+            List<OrderItem> items = order.getItems();
             for (var i : items) {
-                products.put(i.getProduct().getId(), i.getCount());
+                products.put(i.getBook().getId(), i.getCount());
             }
         }
         if (order.getCombo_items() != null) {
@@ -93,7 +92,7 @@ public class OrderDto {
         return id;
     }
 
-    public Order_Status getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
@@ -145,7 +144,7 @@ public class OrderDto {
         return entrance;
     }
 
-    public void setStatus(Order_Status status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 

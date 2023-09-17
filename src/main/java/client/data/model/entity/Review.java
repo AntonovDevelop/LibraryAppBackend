@@ -1,24 +1,24 @@
 package client.data.model.entity;
 
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@EqualsAndHashCode
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Review {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     private Integer score;
-
     private String text;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "product_fk")
-    private Product product;
+    private Book book;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "client_fk")
@@ -26,48 +26,11 @@ public class Review {
 
     private Integer liked;
 
-    public Review() {
-    }
-
-    public Review(Integer score, String text, Integer like) {
-        this.score = score;
-        this.text = text;
-        this.liked = like;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public Integer getScore() {
-        return score;
-    }
-
-    public void setScore(Integer score) {
-        this.score = score;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
-        if (!product.getReviews().contains(this)) {
-            product.setReview(this);
+    public void setBook(Book book) {
+        this.book = book;
+        if (!book.getReviews().contains(this)) {
+            book.setReview(this);
         }
-    }
-
-    public Client getClient() {
-        return client;
     }
 
     public void setClient(Client client) {
@@ -75,13 +38,5 @@ public class Review {
         if (!client.getReviews().contains(this)) {
             client.setReview(this);
         }
-    }
-
-    public Integer getLike() {
-        return liked;
-    }
-
-    public void setLike(Integer like) {
-        this.liked = like;
     }
 }

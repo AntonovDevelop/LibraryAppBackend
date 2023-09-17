@@ -1,8 +1,8 @@
 package client.mvc;
 
-import client.data.model.dto.ProductDto;
+import client.data.model.dto.BookDto;
 import client.service.CategoryService;
-import client.service.ProductService;
+import client.service.BookService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,11 +15,11 @@ import java.util.List;
 @RequestMapping("/category")
 public class CategoryMvcController {
     private final CategoryService categoryService;
-    private final ProductService productService;
+    private final BookService bookService;
 
-    public CategoryMvcController(CategoryService categoryService, ProductService productService) {
+    public CategoryMvcController(CategoryService categoryService, BookService bookService) {
         this.categoryService = categoryService;
-        this.productService = productService;
+        this.bookService = bookService;
     }
 
     @GetMapping
@@ -31,7 +31,7 @@ public class CategoryMvcController {
 
     @GetMapping("/products")
     public String getProductsByCategory(@RequestParam(name = "category") String category, Model model) {
-        List<ProductDto> products = productService.findProductsByCategory(category);
+        List<BookDto> products = bookService.findProductsByCategory(category);
         model.addAttribute("products", products);
         return "category";
     }

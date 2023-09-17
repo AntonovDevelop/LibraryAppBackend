@@ -5,7 +5,7 @@ import client.data.model.dto.ComboDto;
 import client.data.model.entity.Combo;
 import client.data.model.entity.User;
 import client.service.ComboService;
-import client.service.ProductService;
+import client.service.BookService;
 import client.service.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
@@ -20,16 +20,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/combos")
 public class ComboMvcController {
     private final ComboService comboService;
-    private final ProductService productService;
+    private final BookService bookService;
     private final UserService userService;
     private static String getUserName() {
         SecurityContext context = SecurityContextHolder.getContext();
         Authentication authentication = context.getAuthentication();
         return authentication.getName();
     }
-    public ComboMvcController(ComboService comboService, ProductService productService, UserService userService) {
+    public ComboMvcController(ComboService comboService, BookService bookService, UserService userService) {
         this.comboService = comboService;
-        this.productService = productService;
+        this.bookService = bookService;
         this.userService = userService;
     }
 
@@ -52,7 +52,7 @@ public class ComboMvcController {
             dto.setIsInCart(0);
         }
         model.addAttribute("combo", dto);
-        model.addAttribute("products", productService.findProducts(new ComboDto(combo).getProducts()));
+        model.addAttribute("products", bookService.findProducts(new ComboDto(combo).getProducts()));
         return "combo";
     }
 }

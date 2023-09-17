@@ -1,19 +1,19 @@
 package client.data.model.dto;
 
 import client.data.model.entity.Message;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class MessageDto {
     private Long id;
     private String text;
     private Long time;
     private Long sender_id;
     private Long chat_id;
-
-    public MessageDto() {
-    }
 
     public MessageDto(Message message) {
         this.id = message.getId();

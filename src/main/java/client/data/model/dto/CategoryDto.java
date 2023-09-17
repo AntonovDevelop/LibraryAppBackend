@@ -1,17 +1,18 @@
 package client.data.model.dto;
 
 import client.data.model.entity.Category;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class CategoryDto {
-
     private Long id;
     private String name;
     private String description;
     private String image_url;
-
-    public CategoryDto() {
-    }
 
     public CategoryDto(Category category) {
         this.id = category.getId();

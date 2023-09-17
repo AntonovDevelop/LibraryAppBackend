@@ -1,8 +1,6 @@
 package client.data.repository;
 
 import client.data.model.entity.Order;
-import client.data.model.entity.Order_Item;
-import client.data.model.enums.Order_Status;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

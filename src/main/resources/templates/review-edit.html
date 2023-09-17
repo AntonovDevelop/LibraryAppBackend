@@ -24,7 +24,7 @@
 <body>
 <main class="main">
     <div th:text="${errors}" class="margin-bottom alert-danger"></div>
-    <form action="#" th:action="@{/product/{product_id}/review/save/{id}(product_id=${product_id}, id=${id})}" th:object="${reviewDto}" method="post">
+    <form action="#" th:action="@{/book/{product_id}/review/save/{id}(product_id=${product_id}, id=${id})}" th:object="${reviewDto}" method="post">
         <div class="back-edit-pg">
             <div class="name-category-edit-pg" th:if="${reviewDto == null}">Оставьте отзыв</div>
             <div class="name-category-edit-pg" th:if="${reviewDto != null}">Измените отзыв</div>
@@ -47,7 +47,7 @@
                 <span th:if="${id == null}">Добавить</span>
                 <span th:if="${id != null}">Обновить</span>
             </button>
-            <a class="btn btn-secondary button-fixed" th:href="@{/product/{id}(id=${product_id})}">
+            <a class="btn btn-secondary button-fixed" th:href="@{/book/{id}(id=${product_id})}">
                 Назад
             </a>
         </div>

@@ -1,8 +1,7 @@
 package client.data.model.entity;
 
 import client.data.model.enums.UserRole;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -14,11 +13,12 @@ import javax.validation.constraints.Size;
 import java.util.*;
 
 @Entity
-@EqualsAndHashCode
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "users")
 public class User implements UserDetails {
-
-    //Done
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -49,9 +49,6 @@ public class User implements UserDetails {
     @NotNull
     @Column(nullable = false, unique = true)
     private Long user_id;
-
-    public User() {
-    }
 
     public User(String name, String surname, String login, String password, UserRole role, Long user_id) {
         this.name = name;

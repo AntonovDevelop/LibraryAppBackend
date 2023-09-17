@@ -2,28 +2,22 @@ package client.data.model.dto;
 
 
 import client.data.model.entity.Review;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReviewDto {
-
     private Long id;
-
     private Integer score;
-
     private String text;
-
-    private Long product_id;
-
-    private String product;
-
+    private Long bookId;
+    private String book;
     private Long client_id;
-
     private String client;
-
     private Boolean liked;
-
-    public ReviewDto() {
-
-    }
 
     public ReviewDto(Review review) {
         this.id = review.getId();
@@ -33,11 +27,11 @@ public class ReviewDto {
         if (review.getText() != null) {
             this.text = review.getText();
         }
-        if (review.getLike() != null) {
-            this.liked = review.getLike() == 1;
+        if (review.getLiked() != null) {
+            this.liked = review.getLiked() == 1;
         }
-        this.product_id = review.getProduct().getId();
-        this.product = review.getProduct().getName();
+        this.bookId = review.getBook().getId();
+        this.book = review.getBook().getName();
         this.client_id = review.getClient().getId();
         this.client = review.getClient().getName() + ' ' + review.getClient().getSurname();
     }
@@ -66,20 +60,20 @@ public class ReviewDto {
         this.text = text;
     }
 
-    public Long getProduct_id() {
-        return product_id;
+    public Long getBookId() {
+        return bookId;
     }
 
-    public void setProduct_id(Long product_id) {
-        this.product_id = product_id;
+    public void setBookId(Long bookId) {
+        this.bookId = bookId;
     }
 
-    public String getProduct() {
-        return product;
+    public String getBook() {
+        return book;
     }
 
-    public void setProduct(String product) {
-        this.product = product;
+    public void setBook(String book) {
+        this.book = book;
     }
 
     public Long getClient_id() {

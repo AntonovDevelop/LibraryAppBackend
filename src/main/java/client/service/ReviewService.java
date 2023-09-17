@@ -2,7 +2,7 @@ package client.service;
 
 import client.data.model.dto.ReviewDto;
 import client.data.model.entity.Client;
-import client.data.model.entity.Product;
+import client.data.model.entity.Book;
 import client.data.model.entity.Review;
 import client.data.repository.ReviewRepository;
 import client.service.exception.ReviewNotFoundException;
@@ -17,15 +17,15 @@ import java.util.Optional;
 public class ReviewService {
 
     private final ReviewRepository reviewRepository;
-    private final ProductService productService;
+    private final BookService bookService;
     private final ValidatorUtil validatorUtil;
     private final ClientService clientService;
 
-    public ReviewService(ReviewRepository reviewRepository, ProductService productService,
+    public ReviewService(ReviewRepository reviewRepository, BookService bookService,
                          ValidatorUtil validatorUtil, ClientService clientService) {
         this.reviewRepository = reviewRepository;
         this.validatorUtil = validatorUtil;
-        this.productService = productService;
+        this.bookService = bookService;
         this.clientService = clientService;
     }
 
@@ -91,19 +91,19 @@ public class ReviewService {
             review.setText(text);
         }
         if (liked != null) {
-            review.setLike(liked ? 1 : 0);
+            review.setLiked(liked ? 1 : 0);
         }
         final Client client = clientService.findById(client_id);
         review.setClient(client);
-        final Product product = productService.findProduct(product_id);
-        review.setProduct(product);
+        final Book book = bookService.findProduct(product_id);
+        review.setBook(book);
         validatorUtil.validate(review);
         return reviewRepository.save(review);
     }
 
     @Transactional
     public ReviewDto addReview(ReviewDto reviewDto){
-        return new ReviewDto(addReview(reviewDto.getScore(), reviewDto.getText(), reviewDto.getProduct_id(),
+        return new ReviewDto(addReview(reviewDto.getScore(), reviewDto.getText(), reviewDto.getBookId(),
                 reviewDto.getClient_id(), reviewDto.getLiked()));
     }
 
@@ -126,7 +126,7 @@ public class ReviewService {
             review.setText(text);
         }
         if (liked != null) {
-            review.setLike(liked ? 1 : 0);
+            review.setLiked(liked ? 1 : 0);
         }
         validatorUtil.validate(review);
         return reviewRepository.save(review);
@@ -141,7 +141,7 @@ public class ReviewService {
         if (review == null) {
             throw new ReviewNotFoundException(id);
         }
-        review.setLike(liked ? 1 : 0);
+        review.setLiked(liked ? 1 : 0);
         validatorUtil.validate(review);
         return new ReviewDto(reviewRepository.save(review));
     }

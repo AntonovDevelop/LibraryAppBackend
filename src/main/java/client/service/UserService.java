@@ -6,7 +6,6 @@ import client.data.model.entity.Client;
 import client.data.model.entity.User;
 import client.data.model.enums.UserRole;
 import client.data.repository.UserRepository;
-import client.service.exception.ClientNotFoundException;
 import client.service.exception.UserNotFoundException;
 import client.util.validation.ValidatorUtil;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,7 +17,6 @@ import org.springframework.util.StringUtils;
 
 import javax.validation.ValidationException;
 import java.util.Collections;
-import java.util.Objects;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -41,7 +39,7 @@ public class UserService implements UserDetailsService {
     }
 
     public User createUser(UserDto dto) {
-        return createUser(dto.getLogin(), dto.getPassword(), dto.getName(), dto.getSurname(), dto.getPhone_number(), dto.getRole());
+        return createUser(dto.getLogin(), dto.getPassword(), dto.getName(), dto.getSurname(), dto.getPhoneNumber(), dto.getRole());
     }
 
     public User createUser(String login, String password, String name, String surname, String phone_number, UserRole role) {

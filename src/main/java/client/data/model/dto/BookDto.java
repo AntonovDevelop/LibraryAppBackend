@@ -1,9 +1,9 @@
 package client.data.model.dto;
 
-import client.data.model.entity.Product;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ProductDto {
+import client.data.model.entity.Book;
+
+public class BookDto {
     private Long id;
     private String name;
     private String description;
@@ -15,21 +15,21 @@ public class ProductDto {
     private Long combo_id;
     private String combo;
 
-    public ProductDto() {
+    public BookDto() {
     }
 
-    public ProductDto(Product product) {
-        this.id = product.getId();
-        this.name = product.getName();
-        this.description = product.getDescription();
-        this.image_url = product.getImage_url();
-        this.weight = product.getWeight();
-        this.price = product.getPrice();
-        this.category_id = product.getCategory().getId();
-        this.category = product.getCategory().getName();
-        if (product.getCombo() != null) {
-            this.combo = product.getCombo().getName();
-            this.combo_id = product.getCombo().getId();
+    public BookDto(Book book) {
+        this.id = book.getId();
+        this.name = book.getName();
+        this.description = book.getDescription();
+        this.image_url = book.getImage_url();
+        this.weight = book.getWeight();
+        this.price = book.getPrice();
+        this.category_id = book.getCategory().getId();
+        this.category = book.getCategory().getName();
+        if (book.getCombo() != null) {
+            this.combo = book.getCombo().getName();
+            this.combo_id = book.getCombo().getId();
         }
     }
 

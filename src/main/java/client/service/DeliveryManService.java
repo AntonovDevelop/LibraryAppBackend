@@ -1,11 +1,9 @@
 package client.service;
 
-import client.data.model.dto.ClientDto;
 import client.data.model.dto.DeliveryManDto;
 import client.data.model.entity.DeliveryMan;
-import client.data.model.enums.DeliveryMan_Status;
+import client.data.model.enums.DeliveryManStatus;
 import client.data.repository.DeliveryManRepository;
-import client.service.exception.ClientNotFoundException;
 import client.service.exception.DeliveryManNotFoundException;
 import client.util.validation.ValidationException;
 import client.util.validation.ValidatorUtil;
@@ -49,7 +47,7 @@ public class DeliveryManService {
         deliveryMan.setPassword(password);
         deliveryMan.setImage_url(null);
         deliveryMan.setPhone_number(phone_number);
-        deliveryMan.setStatus(DeliveryMan_Status.Offline);
+        deliveryMan.setStatus(DeliveryManStatus.Offline);
         validatorUtil.validate(deliveryMan);
         return repository.save(deliveryMan);
     }
@@ -104,7 +102,7 @@ public class DeliveryManService {
     }
 
     @Transactional
-    public DeliveryMan updateDeliveryManStatus(Long id, DeliveryMan_Status status) {
+    public DeliveryMan updateDeliveryManStatus(Long id, DeliveryManStatus status) {
         final DeliveryMan current = findById(id);
         if (current == null) {
             throw new DeliveryManNotFoundException(id);

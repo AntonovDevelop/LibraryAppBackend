@@ -21,34 +21,34 @@
 <body>
 <main class="main">
     <div th:text="${errors}" class="margin-bottom alert-danger"></div>
-    <form action="#" th:action="@{/admin/products/save/{id}(id=${id})}" th:object="${productDto}" method="post">
+    <form action="#" th:action="@{/admin/books/save/{id}(id=${id})}" th:object="${bookDto}" method="post">
         <div class="back-edit-pg">
             <div class="name-category-edit-pg">Продукт</div>
             <div class="mb-3">
                 <label for="name" class="form-label">Название</label>
-                <input type="text" class="form-control" id="name" th:field="${productDto.name}" required>
+                <input type="text" class="form-control" id="name" th:field="${bookDto.name}" required>
             </div>
             <div class="mb-3">
                 <label for="description" class="form-label">Описание</label>
-                <input type="text" class="form-control" id="description" th:field="${productDto.description}" required>
+                <input type="text" class="form-control" id="description" th:field="${bookDto.description}" required>
             </div>
             <div class="mb-3">
                 <label for="image" class="form-label">Изображение</label>
                 <input type="file" class="form-control" id="image-input" onchange="updateImageName()" required>
-                <input type="text" class="form-control" id="image" th:field="${productDto.image_url}" required style="display: none;">
+                <input type="text" class="form-control" id="image" th:field="${bookDto.image_url}" required style="display: none;">
             </div>
             <div class="mb-3">
                 <label for="weight" class="form-label">Масса</label>
-                <input type="text" class="form-control" id="weight" th:field="${productDto.weight}">
+                <input type="text" class="form-control" id="weight" th:field="${bookDto.weight}">
             </div>
             <div class="mb-3">
                 <label for="price" class="form-label">Цена</label>
-                <input type="text" class="form-control" id="price" th:field="${productDto.price}">
+                <input type="text" class="form-control" id="price" th:field="${bookDto.price}">
             </div>
             <div class="mb-3">
                 <label for="category" class="form-label">Категория</label>
                 <div class = "input-group">
-                    <select class="form-control" id="category" th:field="${productDto.category_id}">
+                    <select class="form-control" id="category" th:field="${bookDto.category_id}">
                         <option th:each = "category, iterator: ${categories}" th:value="${category.id}"
                                 th:text="${category.name}"></option>
                     </select>
@@ -58,7 +58,7 @@
                 <span th:if="${id == null}">Добавить</span>
                 <span th:if="${id != null}">Обновить</span>
             </button>
-            <a class="btn btn-secondary button-fixed" th:href="@{/admin/products}">
+            <a class="btn btn-secondary button-fixed" th:href="@{/admin/books}">
                 Назад
             </a>
         </div>

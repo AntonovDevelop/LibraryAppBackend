@@ -2,7 +2,7 @@ package client.service;
 
 import client.data.model.dto.OrderDto;
 import client.data.model.entity.*;
-import client.data.model.enums.Order_Status;
+import client.data.model.enums.OrderStatus;
 import client.data.model.enums.PaymentEnum;
 import client.data.repository.Combo_OrderRepository;
 import client.data.repository.OrderRepository;
@@ -12,9 +12,6 @@ import client.service.exception.DeliveryManNotFoundException;
 import client.service.exception.OrderNotFoundException;
 import client.service.exception.WrongOrderStatusException;
 import client.util.validation.ValidatorUtil;
-import org.aspectj.weaver.ast.Or;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +26,7 @@ public class OrderService {
     private final Order_ItemRepository order_itemRepository;
     private final Combo_OrderRepository combo_orderRepository;
     private final ClientService clientService;
-    private final ProductService productService;
+    private final BookService bookService;
     private final ComboService comboService;
     private final ChatService chatService;
     private final DeliveryManService deliveryManService;
@@ -38,12 +35,12 @@ public class OrderService {
 
     public OrderService(OrderRepository repository, Order_ItemRepository order_itemRepository,
                         Combo_OrderRepository combo_orderRepository, ClientService clientService,
-                        ProductService productService, ComboService comboService, ChatService chatService, DeliveryManService deliveryManService, ValidatorUtil validatorUtil) {
+                        BookService bookService, ComboService comboService, ChatService chatService, DeliveryManService deliveryManService, ValidatorUtil validatorUtil) {
         this.repository = repository;
         this.order_itemRepository = order_itemRepository;
         this.combo_orderRepository = combo_orderRepository;
         this.clientService = clientService;
-        this.productService = productService;
+        this.bookService = bookService;
         this.comboService = comboService;
         this.chatService = chatService;
         this.deliveryManService = deliveryManService;
@@ -60,7 +57,7 @@ public class OrderService {
         final Order order = new Order();
         order.setPrice(price);
         order.setTitle("Заказ #" + UUID.randomUUID().toString().substring(0, 8));
-        order.setStatus(Order_Status.Is_cart);
+        order.setStatus(OrderStatus.Is_cart);
         order.setPayment(Objects.requireNonNullElse(payment, PaymentEnum.CASH));
 
         order.setTime(Objects.requireNonNullElseGet(time, System::currentTimeMillis));
@@ -87,11 +84,11 @@ public class OrderService {
 
         if (products != null && !products.isEmpty()) {
             for (var p : products.entrySet()) {
-                Product product = productService.findProduct(p.getKey());
-                Order_Item order_item = new Order_Item();
+                Book book = bookService.findProduct(p.getKey());
+                OrderItem order_item = new OrderItem();
                 order_item.setCount(p.getValue());
 
-                order_item.setProduct(product);
+                order_item.setBook(book);
                 order_item.setOrder(order);
 
                 order_itemRepository.save(order_item);
@@ -220,20 +217,20 @@ public class OrderService {
     @Transactional
     public Order changeOrderStatus(Long orderId) {
         Order order = findOrder(orderId);
-        Order_Status status = order.getStatus();
+        OrderStatus status = order.getStatus();
         switch (status) {
             case Accepted -> {
-                status = Order_Status.In_process;
+                status = OrderStatus.In_process;
             }
             case In_process -> {
-                status = Order_Status.Done;
+                status = OrderStatus.Done;
             }
         }
         return changeOrderStatus(orderId, status);
     }
     // Изменение статуса заказа у клиента
     @Transactional
-    public Order changeOrderStatus(Long orderId, Order_Status status) {
+    public Order changeOrderStatus(Long orderId, OrderStatus status) {
         Optional<Order> order = repository.findById(orderId);
         if (order.isEmpty()) {
             throw new OrderNotFoundException(orderId);
@@ -241,7 +238,7 @@ public class OrderService {
         Order current = order.get();
         switch (status) {
             case Accepted: {
-                if (current.getStatus() == Order_Status.Is_cart) {
+                if (current.getStatus() == OrderStatus.Is_cart) {
                     current.setStatus(status);
                     if (current.getStreet() == null || current.getHouse() == null) {
                         setAddress(current.getId(), current.getClient().getStreet(), current.getClient().getHouse(),
@@ -254,7 +251,7 @@ public class OrderService {
                 break;
             }
             case In_process:
-                if (current.getStatus() == Order_Status.Accepted) {
+                if (current.getStatus() == OrderStatus.Accepted) {
                     current.setStatus(status);
                 }
                 else {
@@ -262,7 +259,7 @@ public class OrderService {
                 }
                 break;
             case Rejected: {
-                if (current.getStatus() == Order_Status.Accepted) {
+                if (current.getStatus() == OrderStatus.Accepted) {
                     current.setStatus(status);
                     if (current.getDeliveryMan() != null) {
                         current.removeDeliveryMan();
@@ -274,8 +271,8 @@ public class OrderService {
                 break;
             }
             case Done: {
-                if (current.getStatus() == Order_Status.In_process
-                        || current.getStatus() == Order_Status.On_the_way) {
+                if (current.getStatus() == OrderStatus.In_process
+                        || current.getStatus() == OrderStatus.On_the_way) {
                     current.setStatus(status);
                 }
                 else {
@@ -284,7 +281,7 @@ public class OrderService {
                 break;
             }
             case On_the_way: {
-                if (current.getStatus() == Order_Status.Done) {
+                if (current.getStatus() == OrderStatus.Done) {
                     current.setStatus(status);
                 }
                 else {
@@ -293,7 +290,7 @@ public class OrderService {
                 break;
             }
             case Finish: {
-                if (current.getStatus() == Order_Status.On_the_way) {
+                if (current.getStatus() == OrderStatus.On_the_way) {
                     current.setStatus(status);
                 }
                 else {
@@ -333,27 +330,27 @@ public class OrderService {
 
         if (products != null && !products.isEmpty()) {
             //Номера продуктов, которые сейчас используются
-            Map<Long, Pair<Order_Item, Long>> items = new HashMap<>();
+            Map<Long, Pair<OrderItem, Long>> items = new HashMap<>();
 
             //Тут существующие продукты из заказа с количеством
             for(var i : current.getItems()) {
-                items.put(i.getProduct().getId(), Pair.of(i, i.getCount()));
+                items.put(i.getBook().getId(), Pair.of(i, i.getCount()));
             }
 
             //Добавляем новые
             for(var i : products.entrySet()) {
                 if (!items.containsKey(i.getKey())) {
-                    Product product = productService.findProduct(i.getKey());
-                    Order_Item order_item = new Order_Item();
+                    Book book = bookService.findProduct(i.getKey());
+                    OrderItem order_item = new OrderItem();
                     order_item.setCount(i.getValue());
 
-                    order_item.setProduct(product);
+                    order_item.setBook(book);
                     order_item.setOrder(current);
 
                     order_itemRepository.save(order_item);
                 }
                 else if (items.containsKey(i.getKey()) && !Objects.equals(items.get(i.getKey()).getSecond(), i.getValue())) {
-                    Order_Item order_item = order_itemRepository.getById(items.get(i.getKey()).getFirst().getId());
+                    OrderItem order_item = order_itemRepository.getById(items.get(i.getKey()).getFirst().getId());
                     order_item.setCount(i.getValue());
                     order_itemRepository.save(order_item);
                 }
@@ -371,7 +368,7 @@ public class OrderService {
             //Удалять надо не по айди order_item, а по айди продукта
             order_itemRepository.deleteAllById(current.removeItems()
                     .stream()
-                    .map(Order_Item::getId)
+                    .map(OrderItem::getId)
                     .toList());
         }
 

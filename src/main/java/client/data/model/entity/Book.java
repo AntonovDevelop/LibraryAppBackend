@@ -1,7 +1,6 @@
 package client.data.model.entity;
 
 import lombok.EqualsAndHashCode;
-import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -11,8 +10,7 @@ import java.util.Objects;
 
 @Entity
 @EqualsAndHashCode
-public class Product {
-
+public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -33,7 +31,7 @@ public class Product {
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "product_fk")
-    private List<Order_Item> items = new ArrayList<>();
+    private List<OrderItem> items = new ArrayList<>();
 
     //Done
     @ManyToOne
@@ -49,10 +47,10 @@ public class Product {
     @JoinColumn(name = "product_fk")
     private List<Review> reviews = new ArrayList<>();
 
-    public Product() {
+    public Book() {
     }
 
-    public Product(String name, String description, String image_url, Long weight, Double price) {
+    public Book(String name, String description, String image_url, Long weight, Double price) {
         this.name = name;
         this.description = description;
         this.image_url = image_url;
@@ -104,23 +102,23 @@ public class Product {
         this.price = price;
     }
 
-    public List<Order_Item> getItems() {
+    public List<OrderItem> getItems() {
         return items;
     }
 
-    public void setItems(List<Order_Item> items) {
+    public void setItems(List<OrderItem> items) {
         this.items = items;
     }
 
-    public void addItem(Order_Item item) {
+    public void addItem(OrderItem item) {
         if (!items.contains(item)) {
             items.add(item);
-            if (item.getProduct() != this) {
-                item.setProduct(this);
+            if (item.getBook() != this) {
+                item.setBook(this);
             }
         }
     }
-    public void removeItem(Order_Item item) {
+    public void removeItem(OrderItem item) {
         items.remove(item);
     }
 
@@ -130,7 +128,7 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
-        if (!category.getProducts().contains(this)) {
+        if (!category.getBooks().contains(this)) {
             category.setProduct(this);
         }
     }
@@ -146,7 +144,7 @@ public class Product {
 
     public void setCombo(Combo combo) {
         this.combo = combo;
-        if (!combo.getProducts().contains(this)) {
+        if (!combo.getBooks().contains(this)) {
             combo.setProduct(this);
         }
     }
@@ -168,9 +166,9 @@ public class Product {
         if(!reviews.contains(review))
         {
             reviews.add(review);
-            if(review.getProduct() != this)
+            if(review.getBook() != this)
             {
-                review.setProduct(this);
+                review.setBook(this);
             }
         }
     }

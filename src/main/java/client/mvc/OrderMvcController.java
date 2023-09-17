@@ -2,7 +2,7 @@ package client.mvc;
 
 import client.data.model.dto.*;
 import client.data.model.entity.User;
-import client.data.model.enums.Order_Status;
+import client.data.model.enums.OrderStatus;
 import client.data.model.enums.PaymentEnum;
 import client.service.*;
 import org.springframework.security.core.Authentication;
@@ -24,7 +24,7 @@ public class OrderMvcController {
     private final UserService userService;
     private final ClientService clientService;
     private final ComboService comboService;
-    private final ProductService productService;
+    private final BookService bookService;
     private final DeliveryManService deliveryManService;
 
     private static String getUserName() {
@@ -33,12 +33,12 @@ public class OrderMvcController {
         return authentication.getName();
     }
 
-    public OrderMvcController(OrderService orderService, UserService userService, ClientService clientService, ComboService comboService, ProductService productService, DeliveryManService deliveryManService) {
+    public OrderMvcController(OrderService orderService, UserService userService, ClientService clientService, ComboService comboService, BookService bookService, DeliveryManService deliveryManService) {
         this.orderService = orderService;
         this.userService = userService;
         this.clientService = clientService;
         this.comboService = comboService;
-        this.productService = productService;
+        this.bookService = bookService;
         this.deliveryManService = deliveryManService;
     }
 
@@ -49,16 +49,16 @@ public class OrderMvcController {
         model.addAttribute("cartDto", cartDto);
 
         //Собираем продукты в корзине
-        List<ProductDto> products = productService.findProducts(cartDto.getProducts()
+        List<BookDto> products = bookService.findProducts(cartDto.getProducts()
                 .keySet()
                 .stream()
                 .toList());
-        List<ProductCartDto> productsCart =  new ArrayList<>();
+        List<BookCartDto> productsCart =  new ArrayList<>();
         for (int i = 0; i < cartDto.getProducts().size(); ++i) {
             if (cartDto.getProducts().containsKey(products.get(i).getId())) {
-                ProductCartDto productCartDto = new ProductCartDto(products.get(i),
+                BookCartDto bookCartDto = new BookCartDto(products.get(i),
                         cartDto.getProducts().get(products.get(i).getId()));
-                productsCart.add(productCartDto);
+                productsCart.add(bookCartDto);
             }
         }
         model.addAttribute("products", productsCart);
@@ -136,16 +136,16 @@ public class OrderMvcController {
         }
         model.addAttribute("order", order);
         //Собираем продукты в корзине
-        List<ProductDto> products = productService.findProducts(order.getProducts()
+        List<BookDto> products = bookService.findProducts(order.getProducts()
                 .keySet()
                 .stream()
                 .toList());
-        List<ProductCartDto> productsCart =  new ArrayList<>();
+        List<BookCartDto> productsCart =  new ArrayList<>();
         for (int i = 0; i < order.getProducts().size(); ++i) {
             if (order.getProducts().containsKey(products.get(i).getId())) {
-                ProductCartDto productCartDto = new ProductCartDto(products.get(i),
+                BookCartDto bookCartDto = new BookCartDto(products.get(i),
                         order.getProducts().get(products.get(i).getId()));
-                productsCart.add(productCartDto);
+                productsCart.add(bookCartDto);
             }
         }
         model.addAttribute("products", productsCart);
@@ -199,7 +199,7 @@ public class OrderMvcController {
         User user = userService.findByLogin(getUserName());
 
         OrderDto orderDto = orderService.findClientCart(user.getUser_id());
-        orderDto.setStatus(Order_Status.Accepted);
+        orderDto.setStatus(OrderStatus.Accepted);
         orderDto.setPayment(radio == 1 ? PaymentEnum.CASH : PaymentEnum.NON_CASH);
         orderService.updatePayment(orderDto);
         orderService.changeOrderStatus(orderDto);
@@ -223,7 +223,7 @@ public class OrderMvcController {
         if (order == null) {
             return "redirect:/orders";
         }
-        orderService.changeOrderStatus(order.getId(), Order_Status.Rejected);
+        orderService.changeOrderStatus(order.getId(), OrderStatus.Rejected);
         return "redirect:/orders";
     }
 }

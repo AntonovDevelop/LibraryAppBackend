@@ -1,7 +1,6 @@
 package client.data.model.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -12,7 +11,10 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@EqualsAndHashCode
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Client {
 
     //Done
@@ -64,9 +66,6 @@ public class Client {
     @JoinColumn(name = "client_fk")
     private List<Review> reviews = new ArrayList<>();
 
-    public Client() {
-    }
-
     public Client(String name,
                   String surname,
                   String login,
@@ -85,90 +84,6 @@ public class Client {
         this.house = house;
         this.flat = flat;
         this.entrance = entrance;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPhone_number() {
-        return phone_number;
-    }
-
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getHouse() {
-        return house;
-    }
-
-    public void setHouse(String house) {
-        this.house = house;
-    }
-
-    public String getFlat() {
-        return flat;
-    }
-
-    public void setFlat(String flat) {
-        this.flat = flat;
-    }
-
-    public String getEntrance() {
-        return entrance;
-    }
-
-    public void setEntrance(String entrance) {
-        this.entrance = entrance;
-    }
-
-    public List<Order> getOrders() {
-        return orders;
-    }
-
-    public void setOrders(List<Order> orders) {
-        this.orders = orders;
     }
 
     public void setOrder(Order order){

@@ -1,7 +1,7 @@
 package client.mvc;
 
 import client.data.model.dto.OrderDto;
-import client.data.model.dto.ProductCartDto;
+import client.data.model.dto.BookCartDto;
 import client.data.model.dto.ReviewDto;
 import client.data.model.entity.Review;
 import client.data.model.entity.User;
@@ -18,8 +18,8 @@ import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/product")
-public class ProductMvcController {
-    private final ProductService productService;
+public class BookMvcController {
+    private final BookService bookService;
     private final CategoryService categoryService;
     private final UserService userService;
     private final ReviewService reviewService;
@@ -31,8 +31,8 @@ public class ProductMvcController {
         return authentication.getName();
     }
 
-    public ProductMvcController(ProductService productService, CategoryService categoryService, UserService userService, ReviewService reviewService, OrderService orderService) {
-        this.productService = productService;
+    public BookMvcController(BookService bookService, CategoryService categoryService, UserService userService, ReviewService reviewService, OrderService orderService) {
+        this.bookService = bookService;
         this.categoryService = categoryService;
         this.userService = userService;
         this.reviewService = reviewService;
@@ -43,8 +43,8 @@ public class ProductMvcController {
     public String getProduct(@PathVariable Long id, Model model) {
         User user = userService.findByLogin(getUserName());
         OrderDto cart = orderService.findClientCart(user.getUser_id());
-        ProductCartDto productDto = new ProductCartDto(productService.findProduct(id));
-        if (productService.isProductInCart(user.getUser_id(), id, cart.getId())) {
+        BookCartDto productDto = new BookCartDto(bookService.findProduct(id));
+        if (bookService.isProductInCart(user.getUser_id(), id, cart.getId())) {
             productDto.setIsInCart(1);
         }
         else {

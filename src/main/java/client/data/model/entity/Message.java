@@ -1,7 +1,6 @@
 package client.data.model.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -9,10 +8,11 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@EqualsAndHashCode
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Message {
-
-    //Done
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -31,9 +31,6 @@ public class Message {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_fk")
     private Chat chat;
-
-    public Message() {
-    }
 
     public Message(String text, Long time, Long sender_id) {
         this.text = text;

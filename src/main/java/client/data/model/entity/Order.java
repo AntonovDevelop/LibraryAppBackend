@@ -1,9 +1,8 @@
 package client.data.model.entity;
 
-import client.data.model.enums.Order_Status;
+import client.data.model.enums.OrderStatus;
 import client.data.model.enums.PaymentEnum;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -12,17 +11,19 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@EqualsAndHashCode
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "orders")
 public class Order {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private Order_Status status;
+    private OrderStatus status;
 
     private Double price;
 
@@ -60,7 +61,7 @@ public class Order {
     //done, items will delete when order
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "order_fk")
-    private List<Order_Item> items = new ArrayList<>();
+    private List<OrderItem> items = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "order_fk")
@@ -70,10 +71,7 @@ public class Order {
     @JoinColumn(name = "chat_id")
     private Chat chat;
 
-    public Order() {
-    }
-
-    public Order(Order_Status status, Double price, Integer count, String title, String street, String house,
+    public Order(OrderStatus status, Double price, Integer count, String title, String street, String house,
                  String flat, String entrance, Long time, PaymentEnum payment) {
         this.status = status;
         this.price = price;
@@ -102,11 +100,11 @@ public class Order {
         return id;
     }
 
-    public Order_Status getStatus() {
+    public OrderStatus getStatus() {
         return status;
     }
 
-    public void setStatus(Order_Status status) {
+    public void setStatus(OrderStatus status) {
         this.status = status;
     }
 
@@ -169,15 +167,15 @@ public class Order {
         return k;
     }
 
-    public List<Order_Item> getItems() {
+    public List<OrderItem> getItems() {
         return items;
     }
 
-    public void setItems(List<Order_Item> items) {
+    public void setItems(List<OrderItem> items) {
         this.items = items;
     }
 
-    public void updateItem(Order_Item item) {
+    public void updateItem(OrderItem item) {
         for (var i : items) {
             if (Objects.equals(i.getId(), item.getId())) {
                 i = item;
@@ -185,9 +183,9 @@ public class Order {
             }
         }
     }
-    public Order_Item removeItem(Long id) {
+    public OrderItem removeItem(Long id) {
         for (var i : items) {
-            if (Objects.equals(i.getProduct().getId(), id)) {
+            if (Objects.equals(i.getBook().getId(), id)) {
                 items.remove(i);
                 return i;
             }
@@ -195,13 +193,13 @@ public class Order {
         return null;
     }
 
-    public List<Order_Item> removeItems() {
+    public List<OrderItem> removeItems() {
         var list = new ArrayList<>(items);
         items.clear();
         return list;
     }
 
-    public void setItem(Order_Item item) {
+    public void setItem(OrderItem item) {
         if (!items.contains(item)) {
             items.add(item);
             if (item.getOrder() != this) {

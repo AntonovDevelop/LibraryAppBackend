@@ -53,18 +53,18 @@
                 <div class="status-ordr-pg" th:text="${order.status}"></div>
             </div>
         </div>
-        <div th:if="${!products.isEmpty()}">
-            <div class="products-cart-pg">
-                <div th:each="product : ${products}">
-                    <div class="product-cart-pg">
-                        <a th:href="@{/product/{id}(id=${product.id})}">
-                            <img class="product-image-cart-pg" th:src="@{/images/{image}(image=${product.image_url})}" alt="Описание изображения">
+        <div th:if="${!books.isEmpty()}">
+            <div class="books-cart-pg">
+                <div th:each="book : ${books}">
+                    <div class="book-cart-pg">
+                        <a th:href="@{/book/{id}(id=${book.id})}">
+                            <img class="book-image-cart-pg" th:src="@{/images/{image}(image=${book.image_url})}" alt="Описание изображения">
                         </a>
-                        <div class="product-info-cart-pg">
-                            <div class="info-name-cart-pg" th:text="${product.name}"></div>
-                            <div class="info-price-cart-pg" th:text="${product.price}"></div>
-                            <div class="product-count-frame">
-                                <div class="product-count-text" th:text="'Количество:&nbsp;' + ${product.count}"></div>
+                        <div class="book-info-cart-pg">
+                            <div class="info-name-cart-pg" th:text="${book.name}"></div>
+                            <div class="info-price-cart-pg" th:text="${book.price}"></div>
+                            <div class="book-count-frame">
+                                <div class="book-count-text" th:text="'Количество:&nbsp;' + ${book.count}"></div>
                             </div>
                         </div>
                     </div>
@@ -72,19 +72,19 @@
             </div>
         </div>
         <div th:if="${!combos.isEmpty()}">
-            <div class="products-cart-pg">
+            <div class="books-cart-pg">
                 <div th:each="combo : ${combos}">
-                    <div class="product-cart-pg">
+                    <div class="book-cart-pg">
                         <a th:href="@{/combo/{id}(id=${combo.id})}">
-                            <img class="product-image-cart-pg" th:src="@{/images/{image}(image=${combo.image_url})}" alt="Описание изображения">
+                            <img class="book-image-cart-pg" th:src="@{/images/{image}(image=${combo.image_url})}" alt="Описание изображения">
                         </a>
-                        <div class="product-info-cart-pg">
+                        <div class="book-info-cart-pg">
                             <div class="info-name-cart-pg" th:text="${combo.name}"></div>
                             <div class="combo-price-sale-frame-cart-pg">
                                 <div class="combo info-price-cart-pg" th:text="${combo.price}"></div>
                                 <div class="info-price-cart-pg" th:text="${combo.sale} + '%'"></div>
                             </div>
-                            <div class="product-count-frame">
+                            <div class="book-count-frame">
                                 <div class="combo-count-text" th:text="${combo.count}"></div>
                             </div>
                         </div>
@@ -92,7 +92,7 @@
                 </div>
             </div>
         </div>
-        <div th:if="${!products.isEmpty() || !combos.isEmpty()}">
+        <div th:if="${!books.isEmpty() || !combos.isEmpty()}">
             Общее количество
             <div th:text="${order.count}">
 

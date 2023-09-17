@@ -1,7 +1,13 @@
 package client.data.model.dto;
 
 import client.data.model.entity.Combo;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ComboCartDto {
     private Long id;
     private String name;
@@ -11,9 +17,6 @@ public class ComboCartDto {
     private Long count;
     private Integer isInCart;
     private String description;
-
-    public ComboCartDto() {
-    }
 
     public ComboCartDto(ComboDto comboDto, Long count) {
         this.id = comboDto.getId();

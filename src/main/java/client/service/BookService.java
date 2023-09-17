@@ -1,8 +1,8 @@
 package client.service;
 
-import client.data.model.dto.ProductDto;
+import client.data.model.dto.BookDto;
+import client.data.model.entity.Book;
 import client.data.model.entity.Category;
-import client.data.model.entity.Product;
 import client.data.repository.ProductRepository;
 import client.service.exception.ProductNotFoundException;
 import client.util.validation.ValidationException;
@@ -16,14 +16,14 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class ProductService {
+public class BookService {
     //вроде закончен
     private final ProductRepository productRepository;
     private final CategoryService categoryService;
     private final ValidatorUtil validatorUtil;
 
-    public ProductService(ProductRepository productRepository, CategoryService categoryService,
-                          ValidatorUtil validatorUtil) {
+    public BookService(ProductRepository productRepository, CategoryService categoryService,
+                       ValidatorUtil validatorUtil) {
         this.productRepository = productRepository;
         this.validatorUtil = validatorUtil;
         this.categoryService = categoryService;
@@ -31,18 +31,18 @@ public class ProductService {
 
     //Поиск всех записей в репозитории
     @Transactional(readOnly = true)
-    public List<ProductDto> findAllProducts() {
-        return productRepository.findAll().stream().map(ProductDto::new).toList();
+    public List<BookDto> findAllProducts() {
+        return productRepository.findAll().stream().map(BookDto::new).toList();
     }
 
     //Создание продукта через поля
     @Transactional
-    public Product addProduct(String name,
-                              String description,
-                              String image_url,
-                              Long weight,
-                              Double price,
-                              Long category_id) {
+    public Book addProduct(String name,
+                           String description,
+                           String image_url,
+                           Long weight,
+                           Double price,
+                           Long category_id) {
         if (!StringUtils.hasText(name) || !StringUtils.hasText(description) || category_id == null || category_id <= 0 ||
                 weight == null || weight < 0 || price == null || price < 0) {
             throw new IllegalArgumentException("Product fields are null or empty");
@@ -50,104 +50,104 @@ public class ProductService {
         if (findProductByName(name) != null) {
             throw new ValidationException(String.format("Product '%s' is already exist", name));
         }
-        final Product product = new Product();
-        product.setName(name);
-        product.setDescription(description);
-        product.setImage_url(image_url);
-        product.setWeight(weight);
-        product.setPrice(price);
+        final Book book = new Book();
+        book.setName(name);
+        book.setDescription(description);
+        book.setImage_url(image_url);
+        book.setWeight(weight);
+        book.setPrice(price);
         final Category category = categoryService.findById(category_id);
-        product.setCategory(category);
-        validatorUtil.validate(product);
-        return productRepository.save(product);
+        book.setCategory(category);
+        validatorUtil.validate(book);
+        return productRepository.save(book);
     }
 
     //Создание продукта через Dto
     @Transactional
-    public ProductDto addProduct(ProductDto productDto) {
-        return new ProductDto(
+    public BookDto addProduct(BookDto bookDto) {
+        return new BookDto(
                 addProduct(
-                        productDto.getName(),
-                        productDto.getDescription(),
-                        productDto.getImage_url(),
-                        productDto.getWeight(),
-                        productDto.getPrice(),
-                        productDto.getCategory_id()
+                        bookDto.getName(),
+                        bookDto.getDescription(),
+                        bookDto.getImage_url(),
+                        bookDto.getWeight(),
+                        bookDto.getPrice(),
+                        bookDto.getCategory_id()
                 )
         );
     }
 
     //Поиск продукта в репозитории
     @Transactional(readOnly = true)
-    public Product findProduct(Long id) {
-        final Optional<Product> product = productRepository.findById(id);
+    public Book findProduct(Long id) {
+        final Optional<Book> product = productRepository.findById(id);
         return product.orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     //Поиск продукта в репозитории
     @Transactional(readOnly = true)
-    public ProductDto findProduct(ProductDto productDto) {
-        return new ProductDto(findProduct(productDto.getId()));
+    public BookDto findProduct(BookDto bookDto) {
+        return new BookDto(findProduct(bookDto.getId()));
     }
 
     @Transactional(readOnly = true)
-    public Product findProductByName(String name) {
+    public Book findProductByName(String name) {
         return productRepository.findOneByNameIgnoreCase(name);
     }
 
     @Transactional(readOnly = true)
-    public List<ProductDto> findProductsByCategory(String name) { return productRepository.findProductsByCategory(name)
+    public List<BookDto> findProductsByCategory(String name) { return productRepository.findProductsByCategory(name)
             .stream()
-            .map(ProductDto::new)
+            .map(BookDto::new)
             .toList(); }
 
     //Изменение продукта по полям
     @Transactional
-    public Product updateProduct(Long id, String name,
-                                 String description,
-                                 String image_url,
-                                 Long weight,
-                                 Double price,
-                                 Long category_id) {
+    public Book updateProduct(Long id, String name,
+                              String description,
+                              String image_url,
+                              Long weight,
+                              Double price,
+                              Long category_id) {
         if (!StringUtils.hasText(name) || !StringUtils.hasText(description) || id == null || id <= 0 || weight == null
                 || weight < 0 || price == null || price < 0 || category_id == null || category_id <= 0) {
             throw new IllegalArgumentException("Product fields are null or empty");
         }
-        final Product product = findProduct(id);
-        if (product == null) {
+        final Book book = findProduct(id);
+        if (book == null) {
             throw new ProductNotFoundException(id);
         }
-        if (!product.getName().equals(name) && findProductByName(name) != null) {
+        if (!book.getName().equals(name) && findProductByName(name) != null) {
             throw new IllegalArgumentException(String.format("Product with name [%s] is existed", name));
         }
-        product.setName(name);
-        product.setDescription(description);
-        product.setImage_url(image_url);
-        product.setWeight(weight);
-        product.setPrice(price);
+        book.setName(name);
+        book.setDescription(description);
+        book.setImage_url(image_url);
+        book.setWeight(weight);
+        book.setPrice(price);
 
         final Category category = categoryService.findById(category_id);
-        if (product.getCategory().getId().equals(category_id)) {
-            product.getCategory().updateProduct(product);
+        if (book.getCategory().getId().equals(category_id)) {
+            book.getCategory().updateProduct(book);
         } else {
-            product.getCategory().removeProduct(id);
-            product.setCategory(category);
+            book.getCategory().removeProduct(id);
+            book.setCategory(category);
         }
 
-        validatorUtil.validate(product);
-        return productRepository.save(product);
+        validatorUtil.validate(book);
+        return productRepository.save(book);
     }
 
     //Изменение продукта по полям через Dto
     @Transactional
-    public ProductDto updateProduct(Long id, ProductDto productDto) {
-        return new ProductDto(updateProduct(id, productDto.getName(), productDto.getDescription(),
-                productDto.getImage_url(), productDto.getWeight(), productDto.getPrice(), productDto.getCategory_id()));
+    public BookDto updateProduct(Long id, BookDto bookDto) {
+        return new BookDto(updateProduct(id, bookDto.getName(), bookDto.getDescription(),
+                bookDto.getImage_url(), bookDto.getWeight(), bookDto.getPrice(), bookDto.getCategory_id()));
     }
 
     @Transactional
-    public Product deleteProduct(Long id) {
-        Product current = findProduct(id);
+    public Book deleteProduct(Long id) {
+        Book current = findProduct(id);
         productRepository.delete(current);
         return current;
     }
@@ -158,10 +158,10 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
-    public List<ProductDto> findProducts(List<Long> ids) {
+    public List<BookDto> findProducts(List<Long> ids) {
         return productRepository.findAllById(ids)
                 .stream()
-                .map(ProductDto::new)
+                .map(BookDto::new)
                 .toList();
     }
 
@@ -169,7 +169,7 @@ public class ProductService {
     public List<Long> findProductsByClientCart(Long clientId, Long cartId) {
         return productRepository.findProductsByClient(clientId, cartId)
                 .stream()
-                .map(Product::getId)
+                .map(Book::getId)
                 .toList();
     }
 

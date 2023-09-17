@@ -1,10 +1,8 @@
 package client.service;
 
 import client.data.model.dto.ComboDto;
-import client.data.model.dto.ProductDto;
 import client.data.model.entity.Combo;
-import client.data.model.entity.Order_Item;
-import client.data.model.entity.Product;
+import client.data.model.entity.Book;
 import client.data.repository.ComboRepository;
 import client.service.exception.ComboNotFoundException;
 import client.service.exception.InComboFoundCombo_OrderException;
@@ -24,14 +22,14 @@ public class ComboService {
     private final Logger log = LoggerFactory.getLogger(ComboService.class);
 
     private final ComboRepository repository;
-    private final ProductService productService;
+    private final BookService bookService;
 
     private final ValidatorUtil validatorUtil;
 
-    public ComboService(ComboRepository repository, ValidatorUtil validatorUtil, ProductService productService) {
+    public ComboService(ComboRepository repository, ValidatorUtil validatorUtil, BookService bookService) {
         this.repository = repository;
         this.validatorUtil = validatorUtil;
-        this.productService = productService;
+        this.bookService = bookService;
     }
 
     //Создание комбо через поля
@@ -51,7 +49,7 @@ public class ComboService {
         combo.setPrice(price);
 
         for (var i : product_ids) {
-            combo.setProduct(productService.findProduct(i));
+            combo.setProduct(bookService.findProduct(i));
         }
 
         validatorUtil.validate(combo);
@@ -125,7 +123,7 @@ public class ComboService {
         current.setSale(sale);
 
         if (product_ids != null && !product_ids.isEmpty()) {
-            List<Long> products_prev = current.getProducts().stream().map(Product::getId).toList();
+            List<Long> products_prev = current.getBooks().stream().map(Book::getId).toList();
             Set<Long> products = new HashSet<>(products_prev);
             //Получили общие элементы, которые не надо удалять
             products.retainAll(product_ids); //Работает верно - оставил общие, которые не надо удалять в products
@@ -142,12 +140,12 @@ public class ComboService {
             product_ids.removeAll(products);
             //Добавили нужные - в продукт айдис должны остаться только новые, которые надо добавить, а сейчас тут все
             for (var i : product_ids) {
-                current.setProduct(productService.findProduct(i));
+                current.setProduct(bookService.findProduct(i));
             }
 
         }
         else {
-            for (var p : current.getProducts().stream().map(Product::getId).toList()) {
+            for (var p : current.getBooks().stream().map(Book::getId).toList()) {
                 current.removeProduct(p);
             }
         }

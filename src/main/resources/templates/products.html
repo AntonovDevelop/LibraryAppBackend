@@ -22,7 +22,7 @@
     <main class="main">
         <div>
             <a class="order-btn-cart-pg"
-               th:href="@{/admin/products/edit/}">
+               th:href="@{/admin/books/edit/}">
                 <i class="fa-solid fa-plus"></i> Создать продукт
             </a>
         </div>
@@ -45,33 +45,33 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="product, iterator: ${products}">
+                <tr th:each="book, iterator: ${books}">
                     <th scope="row" th:text="${iterator.index} + 1"></th>
-                    <td th:text="${product.id}"></td>
-                    <td th:text="${product.name}" style="width: 20%"></td>
-                    <td th:text="${product.description}" style="width: 60%"></td>
-                    <td th:text="${product.image_url}" style="width: 20%"><img
-                            th:src="@{/images/{image}(image=${product.image_url})}"
+                    <td th:text="${book.id}"></td>
+                    <td th:text="${book.name}" style="width: 20%"></td>
+                    <td th:text="${book.description}" style="width: 60%"></td>
+                    <td th:text="${book.image_url}" style="width: 20%"><img
+                            th:src="@{/images/{image}(image=${book.image_url})}"
                             style="width: 100px; height: 50px;"></td>
-                    <td th:text="${product.weight} + 'гр.'" style="width: 20%"></td>
-                    <td th:text="${product.price} + 'руб.'" style="width: 15%"></td>
-                    <td th:text="${product.category_id}" style="width: 10%"></td>
-                    <td th:text="${product.category}" style="width: 20%"></td>
-                    <td th:text="${product.combo_id}" style="width: 10%"></td>
-                    <td th:text="${product.combo}" style="width: 20%"></td>
+                    <td th:text="${book.weight} + 'гр.'" style="width: 20%"></td>
+                    <td th:text="${book.price} + 'руб.'" style="width: 15%"></td>
+                    <td th:text="${book.category_id}" style="width: 10%"></td>
+                    <td th:text="${book.category}" style="width: 20%"></td>
+                    <td th:text="${book.combo_id}" style="width: 10%"></td>
+                    <td th:text="${book.combo}" style="width: 20%"></td>
                     <td style="width: 20%">
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <a class="btn btn-warning button-fixed button-sm"
-                               th:href="@{/admin/products/edit/{id}(id=${product.id})}">
+                               th:href="@{/admin/books/edit/{id}(id=${book.id})}">
                                 <i class="fa fa-pencil" aria-hidden="true"></i> Изменить
                             </a>
                             <button type="button" class="btn btn-danger button-fixed button-sm"
-                                    th:attr="onclick=|confirm('Удалить продукт?') && document.getElementById('remove-${product.id}').click()|">
+                                    th:attr="onclick=|confirm('Удалить продукт?') && document.getElementById('remove-${book.id}').click()|">
                                 <i class="fa fa-trash" aria-hidden="true"></i> Удалить
                             </button>
                         </div>
-                        <form th:action="@{/admin/products/delete/{id}(id=${product.id})}" method="post">
-                            <button th:id="'remove-' + ${product.id}" type="submit" style="display: none">
+                        <form th:action="@{/admin/books/delete/{id}(id=${book.id})}" method="post">
+                            <button th:id="'remove-' + ${book.id}" type="submit" style="display: none">
                                 Удалить
                             </button>
                         </form>

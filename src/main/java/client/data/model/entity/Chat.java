@@ -1,7 +1,6 @@
 package client.data.model.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -10,9 +9,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@EqualsAndHashCode
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Chat {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -28,13 +29,6 @@ public class Chat {
 
     @OneToOne(optional = false, mappedBy = "chat")
     private Order order;
-
-    public Chat() {
-    }
-
-    public Chat(String title) {
-        this.title = title;
-    }
 
     public void updateMessage(Message message) {
         for (var m : messages) {
@@ -61,33 +55,5 @@ public class Chat {
                 message.setChat(this);
             }
         }
-    }
-
-    public List<Message> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public Order getOrder() {
-        return order;
-    }
-
-    public void setOrder(Order order) {
-        this.order = order;
     }
 }

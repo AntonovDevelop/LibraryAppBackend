@@ -1,27 +1,27 @@
 package client.data.model.dto;
 
-import client.data.model.entity.Client;
 import client.data.model.entity.DeliveryMan;
-import client.data.model.entity.Order;
-import client.data.model.enums.DeliveryMan_Status;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import client.data.model.enums.DeliveryManStatus;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.HashSet;
 import java.util.Set;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class DeliveryManDto {
     private Long id;
     private String name;
     private String surname;
     private String login;
     private String image_url;
-    private DeliveryMan_Status status;
+    private DeliveryManStatus status;
     private String password;
     private String phone_number;
     private final Set<Long> orders = new HashSet<>();
-
-    public DeliveryManDto() {
-    }
 
     public DeliveryManDto(DeliveryMan deliveryMan) {
         this.id = deliveryMan.getId();
@@ -59,7 +59,7 @@ public class DeliveryManDto {
         return image_url;
     }
 
-    public DeliveryMan_Status getStatus() {
+    public DeliveryManStatus getStatus() {
         return status;
     }
 
@@ -95,7 +95,7 @@ public class DeliveryManDto {
         this.image_url = image_url;
     }
 
-    public void setStatus(DeliveryMan_Status status) {
+    public void setStatus(DeliveryManStatus status) {
         this.status = status;
     }
 

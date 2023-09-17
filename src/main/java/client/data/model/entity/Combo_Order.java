@@ -1,12 +1,14 @@
 package client.data.model.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@EqualsAndHashCode
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Combo_Order {
 
     @Id
@@ -22,9 +24,6 @@ public class Combo_Order {
     private Order order;
 
     private Long count;
-
-    public Combo_Order() {
-    }
 
     public Combo_Order(Long count) {
         this.count = count;

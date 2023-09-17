@@ -2,8 +2,6 @@ package client.rest_mobile;
 
 import client.configuration.WebConfiguration;
 import client.data.model.dto.ComboDto;
-import client.data.model.dto.ProductDto;
-import client.data.model.entity.Combo;
 import client.service.ComboService;
 import org.springframework.web.bind.annotation.*;
 

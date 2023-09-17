@@ -1,5 +1,5 @@
 package client.data.model.enums;
 
-public enum DeliveryMan_Status {
+public enum DeliveryManStatus {
     Offline, Online, Busy
 }

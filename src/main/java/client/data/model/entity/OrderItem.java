@@ -1,22 +1,22 @@
 package client.data.model.entity;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
-@EqualsAndHashCode
-public class Order_Item {
-
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class OrderItem {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "product_fk")
-    private Product product;
+    private Book book;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "order_fk")
@@ -24,10 +24,7 @@ public class Order_Item {
 
     private Long count;
 
-    public Order_Item() {
-    }
-
-    public Order_Item(Long count) {
+    public OrderItem(Long count) {
         this.count = count;
     }
 
@@ -35,15 +32,14 @@ public class Order_Item {
         return id;
     }
 
-
-    public Product getProduct() {
-        return product;
+    public Book getBook() {
+        return book;
     }
 
-    public void setProduct(Product product) {
-        this.product = product;
-        if (!product.getItems().contains(this)) {
-            product.addItem(this);
+    public void setBook(Book book) {
+        this.book = book;
+        if (!book.getItems().contains(this)) {
+            book.addItem(this);
         }
     }
 

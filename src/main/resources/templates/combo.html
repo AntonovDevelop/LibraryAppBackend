@@ -25,13 +25,13 @@
         <div class="combo-name-combo-pg" th:text="${combo.name}">Комбо</div>
         <img class="combo-image-combo-pg" th:src="@{/images/{image}(image=${combo.image_url})}" alt="Описание изображения">
         <div class="combo-info-combo-pg" th:text="${combo.description}"></div>
-        <div class="products-list-combo-pg">
+        <div class="books-list-combo-pg">
             <ul>
-                <li th:each="product : ${products}">
-                    <div class="product-name-combo-pg" th:text="${product.name}"></div>
+                <li th:each="book : ${books}">
+                    <div class="book-name-combo-pg" th:text="${book.name}"></div>
                     <div class="count-price-combo-pg">
-                        <div class="product-price-combo-pg" th:text="${product.price}"></div>
-                        <div class="product-count-combo-pg">1 шт</div>
+                        <div class="book-price-combo-pg" th:text="${book.price}"></div>
+                        <div class="book-count-combo-pg">1 шт</div>
                     </div>
                 </li>
             </ul>

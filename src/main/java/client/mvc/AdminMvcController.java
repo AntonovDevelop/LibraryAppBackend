@@ -1,8 +1,7 @@
 package client.mvc;
 
 import client.data.model.dto.*;
-import client.data.model.entity.User;
-import client.data.model.enums.Order_Status;
+import client.data.model.enums.OrderStatus;
 import client.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,16 +16,16 @@ import java.util.List;
 @RequestMapping("/admin")
 public class AdminMvcController {
 
-    private final ProductService productService;
+    private final BookService bookService;
     private final CategoryService categoryService;
     private final ComboService comboService;
     private final OrderService orderService;
     private final DeliveryManService deliveryManService;
 
-    public AdminMvcController(ProductService productService,
+    public AdminMvcController(BookService bookService,
                               CategoryService categoryService,
                               ComboService comboService, OrderService orderService, DeliveryManService deliveryManService) {
-        this.productService = productService;
+        this.bookService = bookService;
         this.categoryService = categoryService;
         this.comboService = comboService;
         this.orderService = orderService;
@@ -38,16 +37,16 @@ public class AdminMvcController {
         OrderDto order = new OrderDto(orderService.findOrder(id));
         model.addAttribute("order", order);
         //Собираем продукты в корзине
-        List<ProductDto> products = productService.findProducts(order.getProducts()
+        List<BookDto> products = bookService.findProducts(order.getProducts()
                 .keySet()
                 .stream()
                 .toList());
-        List<ProductCartDto> productsCart =  new ArrayList<>();
+        List<BookCartDto> productsCart =  new ArrayList<>();
         for (int i = 0; i < order.getProducts().size(); ++i) {
             if (order.getProducts().containsKey(products.get(i).getId())) {
-                ProductCartDto productCartDto = new ProductCartDto(products.get(i),
+                BookCartDto bookCartDto = new BookCartDto(products.get(i),
                         order.getProducts().get(products.get(i).getId()));
-                productsCart.add(productCartDto);
+                productsCart.add(bookCartDto);
             }
         }
         model.addAttribute("products", productsCart);
@@ -82,18 +81,18 @@ public class AdminMvcController {
     @GetMapping("/products")
     public String getAllProducts(Model model) {
         model.addAttribute("products",
-                productService.findAllProducts());
+                bookService.findAllProducts());
         return "products";
     }
 
     @GetMapping(value = {"/products/edit", "/products/edit/{id}"})
     public String editProduct(@PathVariable(required = false) Long id, Model model) {
         if (id == null || id <= 0) {
-            model.addAttribute("productDto", new ProductDto());
+            model.addAttribute("productDto", new BookDto());
         }
         else {
             model.addAttribute("productId", id);
-            model.addAttribute("productDto", new ProductDto(productService.findProduct(id)));
+            model.addAttribute("productDto", new BookDto(bookService.findProduct(id)));
         }
         model.addAttribute("categories", categoryService.findAllCategories());
         return "product-edit";
@@ -101,7 +100,7 @@ public class AdminMvcController {
 
     @PostMapping(value = {"/products/save", "/products/save/{id}"})
     public String saveProduct(@PathVariable(required = false) Long id,
-                              @ModelAttribute @Valid ProductDto productDto,
+                              @ModelAttribute @Valid BookDto bookDto,
                               BindingResult bindingResult,
                               Model model) {
         if (bindingResult.hasErrors()) {
@@ -109,16 +108,16 @@ public class AdminMvcController {
             return "product-edit";
         }
         if (id == null || id <= 0) {
-            productService.addProduct(productDto);
+            bookService.addProduct(bookDto);
         } else {
-            productService.updateProduct(id, productDto);
+            bookService.updateProduct(id, bookDto);
         }
         return "redirect:/admin/products";
     }
 
     @PostMapping("/products/delete/{id}")
     public String deleteProduct(@PathVariable Long id) {
-        productService.deleteProduct(id);
+        bookService.deleteProduct(id);
         return "redirect:/admin/products";
     }
 
@@ -182,7 +181,7 @@ public class AdminMvcController {
             model.addAttribute("comboId", id);
             model.addAttribute("comboDto", new ComboDto(comboService.findComboEntity(id)));
         }
-        model.addAttribute("products", productService.findAllProducts());
+        model.addAttribute("products", bookService.findAllProducts());
         return "combo-edit";
     }
 
@@ -255,7 +254,7 @@ public class AdminMvcController {
     @PostMapping("/cancelOrder/{id}")
     public String cancelOrder(@PathVariable Long id) {
         OrderDto order = new OrderDto(orderService.findOrder(id));
-        orderService.changeOrderStatus(order.getId(), Order_Status.Rejected);
+        orderService.changeOrderStatus(order.getId(), OrderStatus.Rejected);
         return "redirect:/admin";
     }
 

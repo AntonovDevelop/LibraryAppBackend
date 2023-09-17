@@ -8,9 +8,6 @@ import client.service.exception.InCategoryFoundProductsException;
 import client.util.validation.ValidationException;
 import client.util.validation.ValidatorUtil;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.transaction.annotation.Transactional;
@@ -105,7 +102,7 @@ public class CategoryService {
     public void deleteAllCategories() throws InCategoryFoundProductsException {
         List<Category> categories = repository.findAll();
         for (var c : categories) {
-            if (c.getProducts().size() > 0) {
+            if (c.getBooks().size() > 0) {
                 throw new InCategoryFoundProductsException("Category with id [%s] has relational products");
             }
         }

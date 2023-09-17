@@ -3,17 +3,20 @@ package client.data.model.dto;
 import client.data.model.entity.Chat;
 import client.data.model.entity.Message;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ChatDto {
     private Long id;
     private String title;
     private Long order_id;
     private List<Long> messages;
-
-    public ChatDto() {
-    }
 
     public ChatDto(Chat chat) {
         this.id = chat.getId();

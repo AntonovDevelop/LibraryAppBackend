@@ -1,7 +1,6 @@
 package client.data.model.entity;
 
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -10,9 +9,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@EqualsAndHashCode
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Combo {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -33,14 +34,11 @@ public class Combo {
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.DETACH)
     @JoinColumn(name = "combo_fk")
-    private List<Product> products = new ArrayList<>();
+    private List<Book> books = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "combo_fk")
     private List<Combo_Order> items = new ArrayList<>();
-
-    public Combo() {
-    }
 
     public Combo(String name, String description, String image_url, Double sale, Double price) {
         this.name = name;
@@ -94,43 +92,43 @@ public class Combo {
         this.price = price;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<Book> getBooks() {
+        return books;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
-        for(var p : products) {
+    public void setBooks(List<Book> books) {
+        this.books = books;
+        for(var p : books) {
             if (p.getCombo() != this) {
                 p.setCombo(this);
             }
         }
     }
 
-    public void updateProduct(Product product) {
-        for (var m : products) {
-            if (Objects.equals(m.getId(), product.getId())) {
-                m = product;
+    public void updateProduct(Book book) {
+        for (var m : books) {
+            if (Objects.equals(m.getId(), book.getId())) {
+                m = book;
                 return;
             }
         }
     }
 
-    public Product removeProduct(Long id) {
-        for (var p : products) {
+    public Book removeProduct(Long id) {
+        for (var p : books) {
             if (Objects.equals(p.getId(), id)) {
-                products.remove(p);
+                books.remove(p);
                 return p;
             }
         }
         return null;
     }
 
-    public void setProduct(Product product) {
-        if (!products.contains(product)) {
-            products.add(product);
-            if (product.getCombo() != this) {
-                product.setCombo(this);
+    public void setProduct(Book book) {
+        if (!books.contains(book)) {
+            books.add(book);
+            if (book.getCombo() != this) {
+                book.setCombo(this);
             }
         }
     }

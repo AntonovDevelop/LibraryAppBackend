@@ -9,9 +9,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@EqualsAndHashCode
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Category {
-    //Done
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -26,79 +28,34 @@ public class Category {
 
     private String image_url;
 
-    //done, messages will delete when order
+    //messages will delete when order
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "category_fk")
-    private List<Product> products = new ArrayList<>();
+    private List<Book> books = new ArrayList<>();
 
-    public Category() {
-    }
-
-    public Category(String name, String description, String image_url) {
-        this.name = name;
-        this.description = description;
-        this.image_url = image_url;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public String getImage_url() {
-        return image_url;
-    }
-
-    public void setImage_url(String image_url) {
-        this.image_url = image_url;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void setProducts(List<Product> products) {
-        this.products = products;
-    }
-
-    public void updateProduct(Product product) {
-        for (var p : products) {
-            if (Objects.equals(p.getId(), product.getId())) {
-                p = product;
+    public void updateProduct(Book book) {
+        for (var p : books) {
+            if (Objects.equals(p.getId(), book.getId())) {
+                p = book;
                 return;
             }
         }
     }
-    public Product removeProduct(Long id) {
-        for (var p : products) {
+    public Book removeProduct(Long id) {
+        for (var p : books) {
             if (Objects.equals(p.getId(), id)) {
-                products.remove(p);
+                books.remove(p);
                 return p;
             }
         }
         return null;
     }
 
-    public void setProduct(Product product) {
-        if (!products.contains(product)) {
-            products.add(product);
-            if (product.getCategory() != this) {
-                product.setCategory(this);
+    public void setProduct(Book book) {
+        if (!books.contains(book)) {
+            books.add(book);
+            if (book.getCategory() != this) {
+                book.setCategory(this);
             }
         }
     }

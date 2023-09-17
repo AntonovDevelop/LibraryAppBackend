@@ -1,8 +1,14 @@
 package client.data.model.dto;
 
-import client.data.model.entity.Product;
+import client.data.model.entity.Book;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public class ProductCartDto {
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class BookCartDto {
     private Long id;
     private String name;
     private String image_url;
@@ -14,28 +20,24 @@ public class ProductCartDto {
     private Integer isInCart;
     private String description;
 
-
-    public ProductCartDto() {
-    }
-
-    public ProductCartDto(ProductDto product, Long count) {
-        this.id = product.getId();
-        this.name = product.getName();
-        this.image_url = product.getImage_url();
-        this.weight = product.getWeight();
-        this.price = product.getPrice();
-        this.category_id = product.getCategory_id();
-        this.category = product.getCategory();
+    public BookCartDto(BookDto book, Long count) {
+        this.id = book.getId();
+        this.name = book.getName();
+        this.image_url = book.getImage_url();
+        this.weight = book.getWeight();
+        this.price = book.getPrice();
+        this.category_id = book.getCategory_id();
+        this.category = book.getCategory();
         this.count = count;
     }
 
-    public ProductCartDto(Product product) {
-        this.id = product.getId();
-        this.name = product.getName();
-        this.image_url = product.getImage_url();
-        this.weight = product.getWeight();
-        this.price = product.getPrice();
-        this.description = product.getDescription();
+    public BookCartDto(Book book) {
+        this.id = book.getId();
+        this.name = book.getName();
+        this.image_url = book.getImage_url();
+        this.weight = book.getWeight();
+        this.price = book.getPrice();
+        this.description = book.getDescription();
     }
 
     public Long getId() {

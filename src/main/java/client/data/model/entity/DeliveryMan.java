@@ -1,11 +1,9 @@
 package client.data.model.entity;
 
-import client.data.model.enums.DeliveryMan_Status;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+import client.data.model.enums.DeliveryManStatus;
+import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -13,10 +11,11 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-@EqualsAndHashCode
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class DeliveryMan {
-
-    //Done
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -47,15 +46,12 @@ public class DeliveryMan {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private DeliveryMan_Status status;
+    private DeliveryManStatus status;
 
     //done
     @OneToMany(fetch = FetchType.LAZY)
     @JoinColumn(name = "deliveryman_fk")
     private List<Order> orders = new ArrayList<>();
-
-    public DeliveryMan() {
-    }
 
     public DeliveryMan(String name, String surname, String login, String password, String image_url, String phone_number) {
         this.name = name;
@@ -152,11 +148,11 @@ public class DeliveryMan {
         }
     }
 
-    public DeliveryMan_Status getStatus() {
+    public DeliveryManStatus getStatus() {
         return status;
     }
 
-    public void setStatus(DeliveryMan_Status status) {
+    public void setStatus(DeliveryManStatus status) {
         this.status = status;
     }
 

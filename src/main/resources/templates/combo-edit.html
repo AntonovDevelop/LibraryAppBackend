@@ -47,10 +47,10 @@
                 <input type="text" class="form-control" id="price" th:field="${comboDto.price}">
             </div>
             <div class="mb-3-combos">
-                <label for="product" class="form-label">Продукты</label>
+                <label for="book" class="form-label">Продукты</label>
                 <div class="input-group">
-                    <select class="form-control-combos" id="product" multiple th:field="${comboDto.products}">
-                        <option th:each="product : ${products}" th:value="${product.id}" th:text="${product.name}"></option>
+                    <select class="form-control-combos" id="book" multiple th:field="${comboDto.books}">
+                        <option th:each="book : ${books}" th:value="${book.id}" th:text="${book.name}"></option>
                     </select>
                 </div>
             </div>

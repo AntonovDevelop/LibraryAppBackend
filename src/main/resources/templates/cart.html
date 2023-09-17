@@ -24,30 +24,30 @@
 <div th:insert="navbar"></div>
 <main class="main">
     <div class="back" style="gap: 40px">
-        <div th:if="${!products.isEmpty()}">
-            <div class="products-cart-pg">
-                <div th:each="product : ${products}">
-                    <div class="product-cart-pg">
-                        <a th:href="@{/product/{id}(id=${product.id})}">
-                            <img class="product-image-cart-pg" th:src="@{/images/{image}(image=${product.image_url})}" alt="Описание изображения">
+        <div th:if="${!books.isEmpty()}">
+            <div class="books-cart-pg">
+                <div th:each="book : ${books}">
+                    <div class="book-cart-pg">
+                        <a th:href="@{/book/{id}(id=${book.id})}">
+                            <img class="book-image-cart-pg" th:src="@{/images/{image}(image=${book.image_url})}" alt="Описание изображения">
                         </a>
-                        <div class="product-info-cart-pg">
-                            <div class="info-name-cart-pg" th:text="${product.name}"></div>
-                            <div class="info-price-cart-pg" th:text="${product.price}"></div>
-                            <div class="product-count-frame">
-                                <button class="product-count-minus" th:id="'minus' + ${product.id}" th:attr="data-product-id=${product.id}">
+                        <div class="book-info-cart-pg">
+                            <div class="info-name-cart-pg" th:text="${book.name}"></div>
+                            <div class="info-price-cart-pg" th:text="${book.price}"></div>
+                            <div class="book-count-frame">
+                                <button class="book-count-minus" th:id="'minus' + ${book.id}" th:attr="data-book-id=${book.id}">
                                     <img th:src="@{../images/icons/minus.svg}" style="width: 25px; height: 5px;">
                                 </button>
-                                <div class="product-count-text" th:id="'count-product' + ${product.id}" th:text="${product.count}"></div>
-                                <button class="product-count-plus" th:id="'plus' + ${product.id}" th:attr="data-product-id=${product.id}">
+                                <div class="book-count-text" th:id="'count-book' + ${book.id}" th:text="${book.count}"></div>
+                                <button class="book-count-plus" th:id="'plus' + ${book.id}" th:attr="data-book-id=${book.id}">
                                     <img th:src="@{../images/icons/plus.svg}" style="width: 25px; height: 25px;">
                                 </button>
                                 <button type="button" class="delete-button-cart-pg"
-                                        th:attr="onclick=|document.getElementById('remove_product-${product.id}').click()|">
+                                        th:attr="onclick=|document.getElementById('remove_product-${book.id}').click()|">
                                     Удалить
                                 </button>
-                                <form th:action="@{/orders/cart/removeProduct/{id}(id=${product.id})}" method="post">
-                                    <button th:id="'remove_product-' + ${product.id}" type="submit" style="display: none">
+                                <form th:action="@{/orders/cart/removeProduct/{id}(id=${book.id})}" method="post">
+                                    <button th:id="'remove_product-' + ${book.id}" type="submit" style="display: none">
                                     </button>
                                 </form>
                             </div>
@@ -57,19 +57,19 @@
             </div>
         </div>
         <div th:if="${!combos.isEmpty()}">
-            <div class="products-cart-pg">
+            <div class="books-cart-pg">
                 <div th:each="combo : ${combos}">
-                    <div class="product-cart-pg">
+                    <div class="book-cart-pg">
                         <a th:href="@{/combo/{id}(id=${combo.id})}">
-                            <img class="product-image-cart-pg" th:src="@{/images/{image}(image=${combo.image_url})}" alt="Описание изображения">
+                            <img class="book-image-cart-pg" th:src="@{/images/{image}(image=${combo.image_url})}" alt="Описание изображения">
                         </a>
-                        <div class="product-info-cart-pg">
+                        <div class="book-info-cart-pg">
                             <div class="info-name-cart-pg" th:text="${combo.name}"></div>
                             <div class="combo-price-sale-frame-cart-pg">
                                 <div class="combo info-price-cart-pg" th:text="${combo.price}"></div>
                                 <div class="info-price-cart-pg" th:text="${combo.sale} + '%'"></div>
                             </div>
-                            <div class="product-count-frame">
+                            <div class="book-count-frame">
                                 <button class="combo-count-minus" th:id="'minus' + ${combo.id}" th:attr="data-combo-id=${combo.id}">
                                     <img th:src="@{../images/icons/minus.svg}" style="width: 25px; height: 5px;">
                                 </button>
@@ -91,7 +91,7 @@
                 </div>
             </div>
         </div>
-        <div th:if="${!products.isEmpty() || !combos.isEmpty()}" class="cart-buttons-info">
+        <div th:if="${!books.isEmpty() || !combos.isEmpty()}" class="cart-buttons-info">
             <div class="cart-info-frame">
                 <div>Общее количество:</div>
                 <div th:text="${cartDto.count}" id="count" class="cart-result-text"></div>
@@ -132,7 +132,7 @@
                 </form>
             </div>
         </div>
-        <div th:if="${products.isEmpty() && combos.isEmpty()}">
+        <div th:if="${books.isEmpty() && combos.isEmpty()}">
             <img class="empty-cart-image" th:src="@{../images/cart/logo-cup.svg}" style="margin-bottom: 25px;">
             <div style="font-weight: 600; font-size: 30px; line-height: 36px;">Ваша корзина пуста</div>
         </div>
@@ -142,19 +142,19 @@
 
 $(document).ready(function() {
 
-  $('.product-count-plus').click(function() {
-    var productId = $(this).data('product-id');
+  $('.book-count-plus').click(function() {
+    var productId = $(this).data('book-id');
     changeProductQuantity(productId, 1);
   });
 
-  $('.product-count-minus').click(function() {
-    var productId = $(this).data('product-id');
+  $('.book-count-minus').click(function() {
+    var productId = $(this).data('book-id');
     changeProductQuantity(productId, -1);
   });
 
 
   function changeProductQuantity(productId, count) {
-    var countElementId = '#count-product' + productId;
+    var countElementId = '#count-book' + productId;
     var currentCount = parseInt($(countElementId).text());
 
     var newCount = currentCount + count;
@@ -238,9 +238,9 @@ $(document).ready(function() {
     var totalPrice = 0.0;
     var totalCount = 0;
 
-     $('.product-count-text').each(function() {
+     $('.book-count-text').each(function() {
         var count = parseInt($(this).text());
-        var price = parseFloat($(this).closest('.product-info-cart-pg').find('.info-price-cart-pg').text());
+        var price = parseFloat($(this).closest('.book-info-cart-pg').find('.info-price-cart-pg').text());
 
         totalCount += count;
         totalPrice += count * price;
@@ -248,7 +248,7 @@ $(document).ready(function() {
 
       $('.combo-count-text').each(function() {
         var count = parseInt($(this).text());
-        var price = parseFloat($(this).closest('.product-info-cart-pg').find('.combo.info-price-cart-pg').text());
+        var price = parseFloat($(this).closest('.book-info-cart-pg').find('.combo.info-price-cart-pg').text());
 
         totalCount += count;
         totalPrice += count * price;
