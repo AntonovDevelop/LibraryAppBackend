@@ -3,7 +3,7 @@ package client.service;
 import client.data.model.dto.BookDto;
 import client.data.model.entity.Book;
 import client.data.model.entity.Category;
-import client.data.repository.ProductRepository;
+import client.data.repository.BookRepository;
 import client.service.exception.ProductNotFoundException;
 import client.util.validation.ValidationException;
 import client.util.validation.ValidatorUtil;
@@ -18,13 +18,13 @@ import java.util.Optional;
 @Service
 public class BookService {
     //вроде закончен
-    private final ProductRepository productRepository;
+    private final BookRepository bookRepository;
     private final CategoryService categoryService;
     private final ValidatorUtil validatorUtil;
 
-    public BookService(ProductRepository productRepository, CategoryService categoryService,
+    public BookService(BookRepository bookRepository, CategoryService categoryService,
                        ValidatorUtil validatorUtil) {
-        this.productRepository = productRepository;
+        this.bookRepository = bookRepository;
         this.validatorUtil = validatorUtil;
         this.categoryService = categoryService;
     }
@@ -32,7 +32,7 @@ public class BookService {
     //Поиск всех записей в репозитории
     @Transactional(readOnly = true)
     public List<BookDto> findAllProducts() {
-        return productRepository.findAll().stream().map(BookDto::new).toList();
+        return bookRepository.findAll().stream().map(BookDto::new).toList();
     }
 
     //Создание продукта через поля
@@ -59,7 +59,7 @@ public class BookService {
         final Category category = categoryService.findById(category_id);
         book.setCategory(category);
         validatorUtil.validate(book);
-        return productRepository.save(book);
+        return bookRepository.save(book);
     }
 
     //Создание продукта через Dto
@@ -80,8 +80,8 @@ public class BookService {
     //Поиск продукта в репозитории
     @Transactional(readOnly = true)
     public Book findProduct(Long id) {
-        final Optional<Book> product = productRepository.findById(id);
-        return product.orElseThrow(() -> new ProductNotFoundException(id));
+        final Optional<Book> book = bookRepository.findById(id);
+        return book.orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     //Поиск продукта в репозитории
@@ -92,11 +92,11 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public Book findProductByName(String name) {
-        return productRepository.findOneByNameIgnoreCase(name);
+        return bookRepository.findOneByNameIgnoreCase(name);
     }
 
     @Transactional(readOnly = true)
-    public List<BookDto> findProductsByCategory(String name) { return productRepository.findProductsByCategory(name)
+    public List<BookDto> findProductsByCategory(String name) { return bookRepository.findProductsByCategory(name)
             .stream()
             .map(BookDto::new)
             .toList(); }
@@ -135,7 +135,7 @@ public class BookService {
         }
 
         validatorUtil.validate(book);
-        return productRepository.save(book);
+        return bookRepository.save(book);
     }
 
     //Изменение продукта по полям через Dto
@@ -148,18 +148,18 @@ public class BookService {
     @Transactional
     public Book deleteProduct(Long id) {
         Book current = findProduct(id);
-        productRepository.delete(current);
+        bookRepository.delete(current);
         return current;
     }
 
     @Transactional
     public void deleteAllProducts() {
-        productRepository.deleteAll();
+        bookRepository.deleteAll();
     }
 
     @Transactional(readOnly = true)
     public List<BookDto> findProducts(List<Long> ids) {
-        return productRepository.findAllById(ids)
+        return bookRepository.findAllById(ids)
                 .stream()
                 .map(BookDto::new)
                 .toList();
@@ -167,7 +167,7 @@ public class BookService {
 
     @Transactional(readOnly = true)
     public List<Long> findProductsByClientCart(Long clientId, Long cartId) {
-        return productRepository.findProductsByClient(clientId, cartId)
+        return bookRepository.findProductsByClient(clientId, cartId)
                 .stream()
                 .map(Book::getId)
                 .toList();
